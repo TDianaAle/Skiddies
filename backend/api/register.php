@@ -1,79 +1,73 @@
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 // backend/api/register.php
 
-include __DIR__ . '/../components/connect.php';
-session_start();
+require_once __DIR__ . '/../components/connect.php';
 
-// Imposta intestazioni per CORS
+// Headers CORS
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
 
-// Gestione preflight CORS
+// Gestione preflight (CORS)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Headers: Content-Type');
     exit(0);
 }
 
-// Accetta solo POST
+// Solo POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Metodo non consentito']);
     exit;
 }
 
-// Leggi i dati JSON dalla richiesta
-$name = trim($_POST['name'] ?? '');
-$role = trim($_POST['profession'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$pass = $_POST['pass'] ?? '';
-$cpass = $_POST['cpass'] ?? '';
-$image = $_FILES['image'] ?? null;
-
+// Dati in JSON
+$data = json_decode(file_get_contents("php://input"), true);
+$name = $data['name'] ?? '';
+$email = $data['email'] ?? '';
+$password = $data['password'] ?? '';
+$confirmPassword = $data['confirmPassword'] ?? '';
+$role = $data['role'] ?? '';
+$image = $data['image'] ?? null;
 
 // Validazioni base
-if ($pass !== $cpass) {
-    echo json_encode(['error' => 'Le password non corrispondono.']);
+if (empty($name) || empty($email) || empty($password) || empty($confirmPassword) || empty($role)) {
+    echo json_encode(['error' => 'Tutti i campi sono obbligatori']);
     exit;
 }
 
-// Verifica email esistente
-$stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-
-if ($stmt->num_rows > 0) {
-    echo json_encode(['error' => 'Email già registrata.']);
+if ($password !== $confirmPassword) {
+    echo json_encode(['error' => 'Le password non coincidono']);
     exit;
+}
+
+// Verifica se l'email esiste già
+$table = $role === 'tutor' ? 'tutors' : 'users';
+$check = $conn->prepare("SELECT id FROM $table WHERE email = ?");
+$check->bind_param('s', $email);
+$check->execute();
+$check->store_result();
+
+if ($check->num_rows > 0) {
+    echo json_encode(['error' => 'Email già registrata']);
+    exit;
+}
+$check->close();
+
+// Crittografia password
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+// Inserimento nel database
+$stmt = $conn->prepare("INSERT INTO $table (name, email, password, role) VALUES (?, ?, ?, ?)");
+$stmt->bind_param('ssss', $name, $email, $hashedPassword, $role);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['error' => 'Errore nella registrazione']);
 }
 $stmt->close();
-
-// Hash password
-$hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
-
-// Gestione immagine se base64
-$filename = null;
-if ($image && $image['error'] === UPLOAD_ERR_OK) {
-    $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
-    $filename = uniqid('img_', true) . '.' . $ext;
-    $destination = __DIR__ . '/../uploaded_files/' . $filename;
-
-    if (!move_uploaded_file($image['tmp_name'], $destination)) {
-        echo json_encode(['error' => 'Errore nel caricamento immagine.']);
-        exit;
-    }
-} else {
-    echo json_encode(['error' => 'Nessuna immagine inviata.']);
-    exit;
-}
-// Inserisce nel db
-$insert = $conn->prepare("INSERT INTO users (name, email, password, image, role) VALUES (?, ?, ?, ?, ?)");
-$insert->bind_param("sssss", $name, $email, $hashed_pass, $filename, $role);
-
-if ($insert->execute()) {
-    echo json_encode(['success' => 'Registrazione completata!']);
-} else {
-    echo json_encode(['error' => 'Errore durante la registrazione.']);
-}
-$insert->close();
+?>

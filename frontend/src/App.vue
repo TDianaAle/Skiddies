@@ -7,9 +7,6 @@
 </script>
 
 <style>
-/* Stili globali se vuoi */
-body {
-  font-family: sans-serif;
-  margin: 0;
-}
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600&display=swap');
 </style>

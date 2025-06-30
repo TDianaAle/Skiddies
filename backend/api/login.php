@@ -33,22 +33,38 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
+// Controlla se la connessione al database è attiva
+if (!$conn) {
+    echo json_encode(['error' => 'Connessione al database fallita']);
+    exit;
+}
+
 // Cerca utente
 $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Controlla se l'utente esiste
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
+
+    // Verifica la password
     if (password_verify($password, $user['password'])) {
+        // Imposta la sessione dell'utente
         $_SESSION['user_id'] = $user['id'];
+
+        // Successo
         echo json_encode(['success' => true]);
     } else {
+        // Password errata
         echo json_encode(['error' => 'Password errata']);
     }
 } else {
+    // Utente non trovato
     echo json_encode(['error' => 'Utente non trovato']);
 }
+
+// Chiudi la dichiarazione
 $stmt->close();
 ?>

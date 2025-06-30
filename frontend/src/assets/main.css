@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2family=Nunito:wght@200;300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root{
   --color-primary: #2f572f;
   --primary-opacity: #2f57ef11;

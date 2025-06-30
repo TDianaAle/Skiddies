@@ -37,7 +37,7 @@ const handleLogin = async () => {
     }
 }
 </script>
+<script setup>
+import LoginForm from '@/components/LoginForm.vue'
+</script>
 
-<style scoped>
-/* Aggiungi eventuali stili personalizzati per il tuo form */
-</style>
