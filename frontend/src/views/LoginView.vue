@@ -1,7 +1,12 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-50">
-        <form @submit.prevent="handleLogin" class="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96">
-        <h3 class="text-2xl font-semibold text-center mb-6">Accedi</h3>
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Accedi</h3>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <form @submit.prevent="handleLogin" class="bg-white py-8 px-6 shadow rounded-lg space-y-5">
+        
 
         <!-- Email -->
         <div class="mb-4">
@@ -39,13 +44,15 @@
             Accedi
             </button>
         </div>
+    </form>
+</div>
+</div>
 
         <p class="mt-4 text-sm text-center">
             Non hai un account? 
             <router-link to="/register" class="text-blue-500 hover:underline">Registrati</router-link>
         </p>
-        </form>
-    </div>
+        
 </template>
 
 <script setup>

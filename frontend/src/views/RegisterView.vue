@@ -2,13 +2,6 @@
   <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Registrati</h3>
-      <p class="mt-2 text-center text-sm leading-5 text-gray-500">
-        Oppure
-        <a href="#"
-           class="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-          accedi al tuo account
-        </a>
-      </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -71,7 +64,9 @@
 
         <p class="text-sm text-center mt-2">
           Hai già un account?
-          <router-link to="/login" class="text-blue-600 hover:underline">Accedi</router-link>
+          <router-link to="/login" class="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+            Accedi
+          </router-link>
         </p>
 
         <button
