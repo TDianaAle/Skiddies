@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/*
 :root{
   --color-primary: #2f572f;
   --primary-opacity: #2f57ef11;
@@ -132,7 +132,7 @@ section{
   margin-block: 2rem;
   text-align: center;
 }
-/*------header section-----*/
+/*------header section-----
 .header{
   background-color: var(--white);
   position: sticky;
@@ -234,7 +234,7 @@ text-transform: capitalize;
 .header .flex .profile .flex-btn{
   margin-top: 1.5rem;
 }
-/*-----sidebar-------*/
+/*-----sidebar------
 .side-bar{
   position: fixed;
   top: 0;
@@ -303,3 +303,4 @@ text-transform: capitalize;
   color: var(--white);
   margin-right: 2.5rem;
 }
+-*/
