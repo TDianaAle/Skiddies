@@ -1,4 +1,24 @@
 <template>
+
+<header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <router-link to="/" class="flex items-center space-x-3">
+                        <img src="/img/logo.png" alt="Skiddies Logo" class="h-20 w-auto">
+                        <h1 class="text-2xl font-bold text-gray-800">Skiddies</h1>
+                    </router-link>
+                </div>
+                <!-- Navigazione -->
+                <nav class="space-x-6">
+                    <router-link to="/login"
+                        class="text-gray-600 hover:text-blue-600 transition-colors">Login</router-link>
+                    <router-link to="/register"
+                        class="text-gray-600 hover:text-blue-600 transition-colors">Registrati</router-link>
+                </nav>
+            </div>
+        </header>
+
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Accedi</h3>

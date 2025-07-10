@@ -57,7 +57,7 @@
             required
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
           >
-            <option value="user">Utente</option>
+            <option value="user">Studente</option>
             <option value="tutor">Tutor</option>
           </select>
         </div>
