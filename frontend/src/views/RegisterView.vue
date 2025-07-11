@@ -87,8 +87,8 @@
 
 <script setup>
 import { ref } from 'vue'
-// import { useRouter } from 'vue-router' // Decommenta se vuoi usare router
-// const router = useRouter()
+import { useRouter } from 'vue-router' 
+const router = useRouter()
 
 const name = ref('')
 const email = ref('')
@@ -137,7 +137,7 @@ async function handleRegister() {
 
     if (response.ok && result.success) {
       message.value = 'Registrazione avvenuta con successo!'
-      // router.push('/login') // decommenta per redirigere
+      router.push('/login') // decommenta per redirigere
     } else {
       message.value = result.error || 'Errore imprevisto.'
     }

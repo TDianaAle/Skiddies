@@ -77,6 +77,8 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router' 
+const router = useRouter()
 
 const email = ref('');
 const password = ref('');
@@ -104,7 +106,7 @@ async function handleLogin() {
         if (response.ok && result.success) {
         message.value = 'Login effettuato con successo!';
         // Esegui il redirect verso la dashboard
-        // router.push('/student-dashboard'); 
+        router.push('/dashboard'); 
         } else {
         message.value = result.error || 'Errore imprevisto.';
         }

@@ -26,7 +26,7 @@
         <!-- Hero Section -->
         <section class="bg-blue-50 py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Benvenuto su Skiddies!</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Benvenuto su Skiddies!</h2>
                 <p class="text-xl text-gray-600 font-semibold mb-6">La piattaforma per tutor e studenti dove imparare e insegnare
                     diventa semplice.</p>
             </div>
@@ -37,26 +37,26 @@
             <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-center">
                 <div>
                    
-                    <h3 class="text-2xl font-semibold mb-2">Materiale Didattico</h3>
-                    <p class="text-gray-600 text-xl">Accedi a risorse educative di alta qualità, ovunque e in qualsiasi momento.
+                    <h3 class="text-xl font-semibold mb-2">Materiale Didattico</h3>
+                    <p class="text-gray-600 text-md">Accedi a risorse educative di alta qualità, ovunque e in qualsiasi momento.
                     </p>
                 </div>
                 <div>
                    
-                    <h3 class="text-2xl font-semibold mb-2">Tutor Esperti</h3>
-                    <p class="text-gray-600 text-xl">Impara da tutor qualificati pronti ad aiutarti nel tuo percorso.</p>
+                    <h3 class="text-xl font-semibold mb-2">Tutor Esperti</h3>
+                    <p class="text-gray-600 text-md">Impara da tutor qualificati pronti ad aiutarti nel tuo percorso.</p>
                 </div>
                 <div>
                     
-                    <h3 class="text-2xl font-semibold mb-2">Piattaforma Interattiva</h3>
-                    <p class="text-gray-600 text-xl">Un ambiente moderno e intuitivo per una migliore esperienza di
+                    <h3 class="text-xl font-semibold mb-2">Piattaforma Interattiva</h3>
+                    <p class="text-gray-600 text-md">Un ambiente moderno e intuitivo per una migliore esperienza di
                         apprendimento.</p>
                 </div>
             </div>
 
             <div class="text-center mt-12">
                 <router-link to="/register"
-                    class="bg-[#78D9EA] text-white px-6 py-3 rounded-lg hover:bg-[#8777d5] transition text-xl font-semibold">
+                    class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition text-md font-semibold">
                     Registrati subito!</router-link>
             </div>
 
