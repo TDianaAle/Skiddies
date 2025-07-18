@@ -247,9 +247,5 @@ onMounted(() => {
     loadProfile()
     fetchMyVideos()
 })
-
-
 </script>
-const response = await fetch(...);
-const data = await response.json();
-console.log("Risposta:", data);
+
