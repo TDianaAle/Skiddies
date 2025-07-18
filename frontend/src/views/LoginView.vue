@@ -1,33 +1,32 @@
 <template>
 
 <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <router-link to="/" class="flex items-center space-x-3">
-                        <img src="/img/logo.png" alt="Skiddies Logo" class="h-20 w-auto">
-                        <h1 class="text-2xl font-bold text-gray-800">Skiddies</h1>
-                    </router-link>
-                </div>
-                <!-- Navigazione -->
-                <nav class="space-x-6">
-                    <router-link to="/login"
-                        class="text-gray-600 hover:text-blue-600 transition-colors">Login</router-link>
-                    <router-link to="/register"
-                        class="text-gray-600 hover:text-blue-600 transition-colors">Registrati</router-link>
-                </nav>
-            </div>
-        </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+            <router-link to="/" class="flex items-center space-x-3">
+                <img src="/img/logo.png" alt="Skiddies Logo" class="h-20 w-auto">
+                <h1 class="text-2xl font-bold text-gray-800">Skiddies</h1>
+            </router-link>
+        </div>
+        <!-- Navigazione -->
+        <nav class="space-x-6">
+            <router-link to="/login"
+                class="text-gray-600 hover:text-blue-600 transition-colors">Login</router-link>
+            <router-link to="/register"
+                class="text-gray-600 hover:text-blue-600 transition-colors">Registrati</router-link>
+        </nav>
+    </div>
+</header>
 
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Accedi</h3>
+        <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Accedi</h3>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <form @submit.prevent="handleLogin" class="bg-white py-8 px-6 shadow rounded-lg space-y-5">
+        <form @submit.prevent="handleLogin" class="bg-white py-8 px-6 shadow rounded-lg space-y-5">
         
-
         <!-- Email -->
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
@@ -77,7 +76,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router' 
+import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const email = ref('');
@@ -85,8 +84,6 @@ const password = ref('');
 const message = ref('');
 
 async function handleLogin() {
-  console.log("Form submit called"); // Verifica che la funzione venga chiamata
-
     if (!email.value || !password.value) {
         message.value = 'Tutti i campi sono obbligatori.';
         return;
@@ -98,15 +95,20 @@ async function handleLogin() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ email: email.value, password: password.value })
-        });
+    });
 
-        const result = await response.json();
-        console.log(result); // Log del risultato
+    const result = await response.json();
+    console.log(result);
 
-        if (response.ok && result.success) {
-        message.value = 'Login effettuato con successo!';
-        // Esegui il redirect verso la dashboard
-        router.push('/dashboard'); 
+    if (response.ok && result.success) {
+        const ruolo = result.role;
+        if (ruolo === 'studente') {
+            router.push('/student');
+        } else if (ruolo === 'tutor') {
+            router.push('/tutor');
+        } else {
+            message.value = 'Ruolo non riconosciuto.';
+        }
         } else {
         message.value = result.error || 'Errore imprevisto.';
         }

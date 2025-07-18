@@ -1,18 +1,18 @@
 <?php
-// backend/api/login.php
-
 require_once __DIR__ . '/../components/connect.php';
 session_start();
 
-// Headers CORS
-header('Content-Type: application/json');
+// CORS Headers
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Content-Type: application/json');
 
-// Gestione preflight (CORS)
+// Preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Headers: Content-Type');
-    exit(0);
+    http_response_code(200);
+    exit;
 }
 
 // Solo POST
@@ -22,49 +22,55 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Dati in JSON
+// Ricezione dati JSON
 $data = json_decode(file_get_contents("php://input"), true);
-$email = $data['email'] ?? '';
+$email = strtolower(trim($data['email'] ?? ''));
 $password = $data['password'] ?? '';
 
-// Validazioni base
 if (empty($email) || empty($password)) {
     echo json_encode(['error' => 'Email e password obbligatorie']);
     exit;
 }
 
-// Controlla se la connessione al database è attiva
-if (!$conn) {
-    echo json_encode(['error' => 'Connessione al database fallita']);
-    exit;
-}
+// Funzione per login da una tabella
+function checkUser($conn, $table, $email, $password) {
+    $stmt = $conn->prepare("SELECT id, email, password, role FROM $table WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Cerca utente
-$stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Controlla se l'utente esiste
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-
-    // Verifica la password
-    if (password_verify($password, $user['password'])) {
-        // Imposta la sessione dell'utente
-        $_SESSION['user_id'] = $user['id'];
-
-        // Successo
-        echo json_encode(['success' => true]);
-    } else {
-        // Password errata
-        echo json_encode(['error' => 'Password errata']);
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            return $user;
+        }
     }
-} else {
-    // Utente non trovato
-    echo json_encode(['error' => 'Utente non trovato']);
+    return null;
 }
 
-// Chiudi la dichiarazione
-$stmt->close();
-?>
+$user = checkUser($conn, 'users', $email, $password);
+$fromTable = 'users';
+
+if (!$user) {
+    $user = checkUser($conn, 'tutors', $email, $password);
+    $fromTable = 'tutors';
+}
+
+if ($user) {
+    $role = strtolower($user['role']); // studente o tutor
+
+    $_SESSION['user'] = [
+        'id' => $user['id'],
+        'role' => $role,
+        'email' => $user['email'],
+        'table' => $fromTable
+    ];
+
+    echo json_encode([
+        'success' => true,
+        'redirect' => $role === 'tutor' ? 'tutor' : 'student',
+        'role' => $role
+    ]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Credenziali non valide']);
+}

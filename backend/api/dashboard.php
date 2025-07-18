@@ -23,9 +23,6 @@ if (!$fetch_profile || $fetch_profile['role'] !== 'tutor') {
     exit;
 }
 ?>
-<style type="text/css">
-    <?php include '/front-end/css/admin_style.css';?>
-</style>
 
 <!DOCTYPE html>
 <html lang="it">

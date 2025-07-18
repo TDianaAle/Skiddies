@@ -18,18 +18,28 @@ const message = ref('')
 const handleLogin = async () => {
     try {
         const res = await axios.post(
-            '/api/login.php',
-            JSON.stringify({ email: email.value, password: password.value }),
-            {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            }
-        )
+        '/api/login.php',
+        { email: email.value, password: password.value }, // axios già serializza in JSON
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+    )
 
-        if (res.data.success) {
-            message.value = 'Login effettuato con successo!'
+    if (res.data.success) {
+        message.value = 'Login effettuato con successo!'
+
+        // Gestisci il redirect in base al ruolo
+        if (res.data.redirect === 'studente') {
+            window.location.href = '/student'
+        } else if (res.data.redirect === 'tutor') {
+            window.location.href = '/tutor'
         } else {
-            message.value = res.data.error || 'Errore durante il login.'
+            alert('Ruolo non riconosciuto.')
+        }
+
+        } else {
+        message.value = res.data.error || 'Errore durante il login.'
         }
     } catch (err) {
         console.error(err)
@@ -37,7 +47,3 @@ const handleLogin = async () => {
     }
 }
 </script>
-<script setup>
-import LoginForm from '@/components/LoginForm.vue'
-</script>
-

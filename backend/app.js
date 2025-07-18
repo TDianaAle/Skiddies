@@ -10,8 +10,8 @@ const userRoutes = require('./routes/user');
 app.use(express.json()); // Permette di leggere il corpo delle richieste in formato JSON
 
 // Usa le rotte per login e registrazione
-app.use('/api/auth', authRoutes);  // Ad esempio, POST /api/auth/login per il login
-app.use('/api/user', userRoutes);  // Ad esempio, POST /api/user/register per la registrazione
+app.use('/api/auth', authRoutes); 
+app.use('/api/user', userRoutes); 
 
 // Rotta di test
 app.get('/', (req, res) => {
