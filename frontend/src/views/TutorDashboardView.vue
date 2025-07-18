@@ -77,7 +77,7 @@
                 <h3 class="font-semibold">{{ video.title }}</h3>
                 <p class="text-sm text-gray-600">Categoria: {{ video.category }}</p>
                 <video
-                :src="`http://localhost/skiddies/backend/${video.file_path}`"
+                :src="`http://localhost/skiddies/backend/uploads/videos/${video.filename}`"
                 controls
                 class="w-full mt-2 rounded"
                 />
@@ -206,37 +206,40 @@ function handleFileChange(e) {
 
 async function uploadVideo() {
     if (!newVideo.value.title || !newVideo.value.category) {
-        alert('Inserisci titolo e categoria')
-        return
+        alert('Inserisci titolo e categoria');
+        return;
     }
     if (!videoFile.value) {
-        alert('Seleziona un file video')
-        return
+        alert('Seleziona un file video');
+        return;
     }
 
-    const formData = new FormData()
-    formData.append('title', newVideo.value.title)
-    formData.append('category', newVideo.value.category)
-    formData.append('video', videoFile.value)
+    const formData = new FormData();
+    formData.append('title', newVideo.value.title);
+    formData.append('category', newVideo.value.category);
+    formData.append('video', videoFile.value);
 
     try {
-    const res = await fetch('http://localhost/skiddies/backend/api/upload_video.php', {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
-    })
-    const result = await res.json()
-    if (result.success) {
-        alert('Video caricato con successo!')
-        newVideo.value.title = ''
-        newVideo.value.category = ''
-        videoFile.value = null
-        fetchMyVideos()
+        const res = await fetch('http://localhost/skiddies/backend/api/upload_video.php', {
+            method: 'POST',
+            credentials: 'include', // Mantiene la sessione attiva
+            body: formData,
+        });
+
+        const result = await res.json();
+        if (result.success) {
+            alert('Video caricato con successo!');
+            newVideo.value.title = '';
+            newVideo.value.category = '';
+            videoFile.value = null;
+
+            await fetchMyVideos(); //Ricarica i video dopo upload
         } else {
-        alert('Errore nel caricamento del video: ' + (result.error || 'Errore sconosciuto'))
+            alert('Errore nel caricamento del video: ' + (result.error || 'Errore sconosciuto'));
         }
     } catch (error) {
-        console.error('Errore upload video:', error)
+        console.error('Errore upload video:', error);
+        alert('Errore nella richiesta');
     }
 }
 
@@ -244,4 +247,9 @@ onMounted(() => {
     loadProfile()
     fetchMyVideos()
 })
+
+
 </script>
+const response = await fetch(...);
+const data = await response.json();
+console.log("Risposta:", data);

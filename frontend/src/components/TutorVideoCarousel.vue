@@ -8,7 +8,10 @@
             :key="video.id"
             class="video-card"
         >
-            <video width="300" controls :src="`http://localhost:8000/${video.file_path}`"></video>
+            <video width="300" controls :src="`const response = await fetch('http://localhost/skiddies/backend/api/get_tutor_videos.php', {
+            credentials: 'include',
+            });
+            `"></video>
             <h4>{{ video.title }}</h4>
             <p>{{ video.category }}</p>
         </div>
@@ -34,7 +37,7 @@ export default {
     },
     methods: {
         async fetchVideos() {
-        const res = await fetch('http://localhost:8000/api/get_tutor_videos.php', {
+        const res = await fetch('http://localhost/skiddies/backend/api/tutor_videos.php', {
             credentials: 'include'
         });
         const data = await res.json();

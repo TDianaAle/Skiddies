@@ -57,7 +57,7 @@ if (!$user) {
 }
 
 if ($user) {
-    $role = strtolower($user['role']); // studente o tutor
+    $role = ($fromTable === 'tutors') ? 'tutor' : 'student'; // studente o tutor
 
     $_SESSION['user'] = [
         'id' => $user['id'],
@@ -65,6 +65,8 @@ if ($user) {
         'email' => $user['email'],
         'table' => $fromTable
     ];
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['role'] = $role;
 
     echo json_encode([
         'success' => true,

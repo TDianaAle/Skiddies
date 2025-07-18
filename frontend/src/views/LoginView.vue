@@ -102,7 +102,7 @@ async function handleLogin() {
 
     if (response.ok && result.success) {
         const ruolo = result.role;
-        if (ruolo === 'studente') {
+        if (ruolo === 'student') {
             router.push('/student');
         } else if (ruolo === 'tutor') {
             router.push('/tutor');
