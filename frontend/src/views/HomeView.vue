@@ -21,7 +21,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-100 py-8 text-center text-gray-500 text-sm mt-10">
-        2025 Skiddies | Made By Sofia & Diana
+        2025 Skiddies | Made By Diana Tichy & Sofia Ricci
     </footer>
     </div>
 </template>

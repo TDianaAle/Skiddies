@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'studente') {
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
     echo json_encode(['success' => false, 'error' => 'Non autorizzato']);
     exit;
 }

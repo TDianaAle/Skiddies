@@ -25,7 +25,7 @@ if (!isset($_SESSION['user']['id'])) {
     exit;
 }
 
-if ($_SESSION['user']['role'] !== 'studente') {
+if ($_SESSION['user']['role'] !== 'student') {
     http_response_code(403);
     echo json_encode(['error' => 'Accesso negato']);
     exit;

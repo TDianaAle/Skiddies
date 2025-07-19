@@ -30,7 +30,7 @@ const handleLogin = async () => {
         message.value = 'Login effettuato con successo!'
 
         // Gestisci il redirect in base al ruolo
-        if (res.data.redirect === 'studente') {
+        if (res.data.redirect === '') {
             window.location.href = '/student'
         } else if (res.data.redirect === 'tutor') {
             window.location.href = '/tutor'
