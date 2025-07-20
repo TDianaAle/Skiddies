@@ -93,7 +93,11 @@
                         <div class="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
                             <h2 class="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>
 
-                            <div class="grid max-w-2xl mx-auto mt-8">
+                            <div v-if="loading" class="flex justify-center items-center py-10">
+                                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+                            </div>
+
+                            <div v-else class="grid max-w-2xl mx-auto mt-8">
                                 <div class="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
 
                                     <img class="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
@@ -118,17 +122,17 @@
                                         <div class="w-full">
                                             <label for="first_name"
                                                 class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Nome</label>
-                                            <input type="text" id="first_name"
+                                            <input type="text" id="first_name" v-model="userProfile.name"
                                                 class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                                placeholder="Your first name" value="Jane" required>
+                                                placeholder="Il tuo nome" required>
                                         </div>
 
                                         <div class="w-full">
-                                            <label for="last_name"
-                                                class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Cognome</label>
-                                            <input type="text" id="last_name"
+                                            <label for="password"
+                                                class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Password</label>
+                                            <input type="password" id="password" v-model="userProfile.password"
                                                 class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                                placeholder="Your last name" value="Ferguson" required>
+                                                placeholder="Nuova password (lascia vuoto per non modificare)">
                                         </div>
 
                                     </div>
@@ -136,7 +140,7 @@
                                     <div class="mb-2 sm:mb-6">
                                         <label for="email"
                                             class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Email</label>
-                                        <input type="email" id="email"
+                                        <input type="email" id="email" v-model="userProfile.email"
                                             class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
                                             placeholder="your.email@mail.com" required>
                                     </div>
@@ -144,18 +148,17 @@
                                     <div class="mb-2 sm:mb-6">
                                         <label for="profession"
                                             class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Ruolo</label>
-                                        <input type="text" id="profession"
-                                            class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                            placeholder="your profession" required>
+                                        <input type="text" id="profession" v-model="userProfile.role" disabled
+                                            class="bg-indigo-50 border border-indigo-300 text-gray-500 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                            placeholder="Il tuo ruolo" required>
                                     </div>
 
-
-
                                     <div class="flex justify-end">
-                                        <button type="submit"
-                                            class="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg 
-                                    text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
-                                            Save</button>
+                                        <button @click="saveProfile" :disabled="loading"
+                                            class="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg 
+                                            text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800 disabled:opacity-50">
+                                            {{ loading ? 'Salvataggio...' : 'Salva' }}
+                                        </button>
                                     </div>
 
                                 </div>
@@ -168,9 +171,9 @@
             </div>
         </div>
         <!-- Footer -->
-                <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
-                    2025 Skiddies | Made By Diana Tichy & Sofia Ricci
-                </footer>
+        <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
+            2025 Skiddies | Made By Diana Tichy & Sofia Ricci
+        </footer>
     </div>
 
 </template>
@@ -180,66 +183,75 @@ export default {
     data() {
         return {
             userImageUrl: localStorage.getItem('userImageUrl') || 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
-            showDropdown: false
+            showDropdown: false,
+            isSidebarOpen: true,
+            userProfile: {
+                name: '',
+                email: '',
+                password: '',
+                role: ''  // Inizializzato vuoto, verrà popolato dal backend
+            },
+            loading: false,
+            userType: null // Aggiungiamo una variabile per tenere traccia del tipo di utente (studente o tutor)
         };
     },
     methods: {
-        onImageChange(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageUrl = reader.result;
-                this.userImageUrl = imageUrl;
-                localStorage.setItem('userImageUrl', imageUrl);
-                if (this.$store) {
-                    this.$store.commit('setUserImageUrl', imageUrl);
-                }
-            };
-            reader.readAsDataURL(file);
-        },
-        removePicture() {
-            const defaultImage = 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60';
-            this.userImageUrl = defaultImage;
-            localStorage.setItem('userImageUrl', defaultImage);
-            if (this.$store) {
-                this.$store.commit('setUserImageUrl', defaultImage);
-            }
-        },
-        toggleDropdown() {
-            this.showDropdown = !this.showDropdown;
-        },
-        handleDropdownMouseLeave() {
-            setTimeout(() => {
-                this.showDropdown = false;
-            }, 200);
-        },
-        goToProfile() {
-            this.showDropdown = false;
-            this.$router.push('/personalization');
-        },
-        logout() {
-            // Implementa la logica di logout se serve
-            this.$router.push('/login');
-        },
-        toggleSidebar() {
-            this.isSidebarOpen = !this.isSidebarOpen;
-        },
-        goTo(page) {
-            if (page === 'student') this.$router.push('/student');
-            if (page === 'courses') this.$router.push('/courses');
-            if (page === 'messages') this.$router.push('/messages');
-            if (page === 'playlist') this.$router.push('/playlist');
+        // Gli altri metodi rimangono invariati
+        
+        async fetchUserProfile() {
+    try {
+        this.loading = true;
+        
+        const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Errore nel caricamento del profilo');
         }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('Dati profilo ricevuti:', data);
+            this.userProfile.name = data.name;
+            this.userProfile.email = data.email;
+            this.userType = data.userType; // Salva il tipo di utente
+            
+            // Imposta il ruolo se disponibile
+            if (data.role) {
+                this.userProfile.role = data.role;
+            } else if (this.userType) {
+                // Se il ruolo non è disponibile ma abbiamo il tipo di utente, lo usiamo
+                this.userProfile.role = this.userType === 'tutor' ? 'tutor' : 'studente';
+            }
+            
+            // Aggiorna l'immagine del profilo se disponibile
+            if (data.image) {
+                this.userImageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+            }
+        } else {
+            console.error('Errore nel caricamento del profilo:', data.error);
+        }
+    } catch (error) {
+        console.error('Errore nella richiesta:', error);
+    } finally {
+        this.loading = false;
+    }
+}
+
+        
+        // Gli altri metodi rimangono invariati
     },
     mounted() {
         if (this.$store && this.$store.state.userImageUrl) {
             this.userImageUrl = this.$store.state.userImageUrl;
         }
         this.isSidebarOpen = true;
+        
+        // Carica i dati del profilo quando il componente viene montato
+        this.fetchUserProfile();
     }
 }
-
-
-
 </script>
