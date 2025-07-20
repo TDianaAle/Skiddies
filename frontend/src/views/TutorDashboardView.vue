@@ -102,7 +102,6 @@
               </div>
               <div v-else class="mt-3 text-sm text-gray-400">Nessun commento</div>
             </div>
-
           </div>
         </div>
 

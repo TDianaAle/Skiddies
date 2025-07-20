@@ -17,10 +17,10 @@ $tutorId = $_SESSION['user']['id'];
 // ✅ Recupera i video + conteggio like
 $stmt = $conn->prepare("
     SELECT v.*, 
-           (SELECT COUNT(*) FROM likes l WHERE l.video_id = v.id) AS likes
+        (SELECT COUNT(*) FROM likes l WHERE l.content_id = v.id) AS likes
     FROM videos v
     WHERE v.tutor_id = ?
-    ORDER BY v.date DESC
+    ORDER BY v.uploaded_at DESC
 ");
 $stmt->bind_param("i", $tutorId);
 $stmt->execute();
