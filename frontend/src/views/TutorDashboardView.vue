@@ -112,23 +112,6 @@
               playsinline
               class="w-full h-[50vh] object-contain rounded mb-4"
             ></video>
-
-            <div v-if="getExpandedVideo?.comments?.length">
-              <h4 class="font-semibold text-sm mt-2">Commenti:</h4>
-              <ul class="text-sm space-y-1 max-h-32 overflow-y-auto border rounded p-2 bg-gray-50 mt-1">
-                <li
-                  v-for="comment in getExpandedVideo.comments"
-                  :key="comment.id"
-                  class="border-b pb-1"
-                >
-                  <strong>{{ comment.student_name }}:</strong> {{ comment.text }}
-                </li>
-              </ul>
-            </div>
-
-            <div class="text-sm text-gray-700 mt-2">
-              👍 Likes: {{ getExpandedVideo?.likes_count ?? 0 }}
-            </div>
           </div>
         </div>
       </section>
@@ -229,6 +212,8 @@ const fetchMyVideos = async () => {
     const result = await res.json()
     if (result.success) {
       videos.value = result.videos
+    } else {
+      console.error('Errore dal backend:', result.error)
     }
   } catch (err) {
     console.error('Errore fetch video:', err)
