@@ -2,6 +2,10 @@
 session_start();
 require_once __DIR__ . '/../components/connect.php';
 
+error_log("PHPSESSID: " . session_id());
+error_log("SESSION DATA: " . print_r($_SESSION, true));
+
+
 // Header CORS completi e permissivi per localhost dev
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
@@ -11,7 +15,6 @@ header('Content-Type: application/json');
 
 // Gestione della richiesta preflight OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Rispondi 200 OK con header CORS e senza body
     http_response_code(200);
     exit;
 }
@@ -33,19 +36,40 @@ if (!$userId || !$videoId) {
     exit;
 }
 
-// Controlla se like già esiste
-$stmt = $conn->prepare("SELECT id FROM likes WHERE user_id=? AND video_id=?");
-$stmt->bind_param("ii", $userId, $videoId);
+// Ottieni il tutor_id del video
+$stmt = $conn->prepare("SELECT tutor_id FROM videos WHERE id = ?");
+$stmt->bind_param("i", $videoId);
 $stmt->execute();
 $result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    http_response_code(404);
+    echo json_encode(['success' => false, 'error' => 'Video non trovato']);
+    exit;
+}
+
+$video = $result->fetch_assoc();
+$tutorId = $video['tutor_id'];
+
+// Controlla se like già esiste
+$stmt = $conn->prepare("SELECT user_id FROM likes WHERE user_id=? AND tutor_id=? AND content_id=?");
+$stmt->bind_param("iii", $userId, $tutorId, $videoId);
+$stmt->execute();
+$result = $stmt->get_result();
+
 if ($result->num_rows > 0) {
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => true, 'message' => 'Like già presente']);
     exit;
 }
 
 // Inserisci like
-$stmt = $conn->prepare("INSERT INTO likes (user_id, video_id) VALUES (?, ?)");
-$stmt->bind_param("ii", $userId, $videoId);
-$stmt->execute();
+$stmt = $conn->prepare("INSERT INTO likes (user_id, tutor_id, content_id) VALUES (?, ?, ?)");
+$stmt->bind_param("iii", $userId, $tutorId, $videoId);
 
-echo json_encode(['success' => true]);
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Like aggiunto con successo']);
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Errore nel salvare il like']);
+}
+?>

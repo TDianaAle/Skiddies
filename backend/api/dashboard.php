@@ -2,6 +2,12 @@
 session_start();
 include_once('../components/connect.php');
 
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Content-Type: application/json');
+
 // Verifica che l'utente sia loggato
 if (!isset($_COOKIE['tutor_id'])) {
         $tutor_id = $_COOKIE['tutor_id'];

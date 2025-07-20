@@ -41,8 +41,16 @@ function checkUser($conn, $table, $email, $password) {
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
+
+        // Debug temporaneo per vedere i dati recuperati dal DB
+        error_log("USER FETCHED FROM DB ($table): " . print_r($user, true));
+
         if (password_verify($password, $user['password'])) {
-            return $user;
+            return [
+                'id' => (int)$user['id'],  // cast esplicito a intero per sicurezza
+                'email' => $user['email'],
+                'role' => $user['role']
+            ];
         }
     }
     return null;
@@ -56,8 +64,8 @@ if (!$user) {
     $fromTable = 'tutors';
 }
 
-if ($user) {
-    $role = ($fromTable === 'tutors') ? 'tutor' : 'student'; // studente o tutor
+if ($user && !empty($user['id'])) {
+    $role = ($fromTable === 'tutors') ? 'tutor' : 'student';
 
     $_SESSION['user'] = [
         'id' => $user['id'],
@@ -68,11 +76,16 @@ if ($user) {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['role'] = $role;
 
+    // Debug finale: dati salvati in sessione
+    error_log("USER FINAL SESSION DATA: " . print_r($_SESSION, true));
+
+    session_write_close(); // Assicurarsi che la sessione venga salvata prima della risposta
+
     echo json_encode([
         'success' => true,
         'redirect' => $role === 'tutor' ? 'tutor' : 'student',
         'role' => $role
     ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Credenziali non valide']);
+    echo json_encode(['success' => false, 'error' => 'Credenziali non valide o id mancante']);
 }
