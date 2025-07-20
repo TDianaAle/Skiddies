@@ -194,103 +194,154 @@ const likedVideos = ref(new Set())
 const playlistVideos = ref(new Set())
 
 function toggleSidebar() {
-    isSidebarOpen.value = !isSidebarOpen.value
+  isSidebarOpen.value = !isSidebarOpen.value
 }
+
 function toggleDropdown() {
-    showDropdown.value = !showDropdown.value
+  showDropdown.value = !showDropdown.value
 }
+
 function goToProfile() {
-    showDropdown.value = false
-    router.push('/personalization')
+  showDropdown.value = false
+  router.push('/personalization')
 }
+
 function handleDropdownMouseLeave() {
-    setTimeout(() => {
-        showDropdown.value = false
-    }, 200)
+  setTimeout(() => {
+    showDropdown.value = false
+  }, 200)
 }
+
 function goTo(route) {
-    router.push(`/${route}`)
+  router.push(`/${route}`)
 }
 
 const filteredVideos = computed(() => {
-    if (!selectedCategory.value) return videos.value
-    return videos.value.filter((video) => video.category === selectedCategory.value)
+  if (!selectedCategory.value) return videos.value
+  return videos.value.filter((video) => video.category === selectedCategory.value)
 })
 
 onMounted(() => {
-    fetchVideos()
-    window.addEventListener('storage', () => {
-        userImageUrl.value = localStorage.getItem('userImageUrl') || userImageUrl.value
-    })
+  fetchVideos()
+  window.addEventListener('storage', () => {
+    userImageUrl.value = localStorage.getItem('userImageUrl') || userImageUrl.value
+  })
 })
 
 async function fetchVideos() {
-    try {
-        const res = await fetch('http://localhost/skiddies/backend/api/get_all_videos.php', {
-        credentials: 'include'
-        })
-        const result = await res.json()
-        videos.value = result.videos || []
-    } catch (error) {
-        console.error('Errore nel caricamento dei video:', error)
+  try {
+    // Carica tutti i video
+    const res = await fetch('http://localhost/skiddies/backend/api/get_all_videos.php', {
+      credentials: 'include'
+    });
+    
+    // Verifica se la risposta è valida
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Errore nella risposta API:', text);
+      throw new Error(`Errore HTTP: ${res.status}`);
     }
-}
-
-function logout() {
-    fetch('http://localhost/skiddies/backend/api/logout.php', {
-        method: 'POST',
+    
+    const result = await res.json();
+    videos.value = result.videos || [];
+    
+    try {
+      // Carica i video già nella playlist
+      const playlistRes = await fetch('http://localhost/skiddies/backend/api/get_playlist.php', {
         credentials: 'include'
-    }).then(() => {
-        router.push('/login')
-    })
+      });
+      
+      // Verifica se la risposta è valida
+      if (!playlistRes.ok) {
+        const text = await playlistRes.text();
+        console.error('Errore nella risposta API playlist:', text);
+        return; // Continua senza i dati della playlist
+      }
+      
+      const playlistResult = await playlistRes.json();
+      
+      if (playlistResult.success) {
+        // Aggiorna il set dei video nella playlist
+        playlistResult.videos.forEach(video => {
+          playlistVideos.value.add(video.id);
+        });
+      }
+    } catch (playlistError) {
+      console.error('Errore nel caricamento della playlist:', playlistError);
+      // Continua senza i dati della playlist
+    }
+  } catch (error) {
+    console.error('Errore nel caricamento dei video:', error);
+  }
 }
 
 async function addToPlaylist(videoId) {
+  try {
     const res = await fetch('http://localhost/skiddies/backend/api/add_to_playlist.php', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ video_id: videoId })
-    })
-    const result = await res.json()
-    if (result.success) {
-        playlistVideos.value.add(videoId)
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ video_id: videoId })
+    });
+    
+    // Verifica se la risposta è valida
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Errore nella risposta API:', text);
+      throw new Error(`Errore HTTP: ${res.status}`);
     }
+    
+    const result = await res.json();
+    if (result.success) {
+      playlistVideos.value.add(videoId);
+    }
+  } catch (error) {
+    console.error('Errore nell\'aggiunta alla playlist:', error);
+  }
 }
 
 async function likeVideo(videoId) {
-    const res = await fetch('http://localhost/skiddies/backend/api/like_video.php', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ video_id: videoId })
-    })
-    const result = await res.json()
-    if (result.success) {
-        likedVideos.value.add(videoId)
-    }
+  const res = await fetch('http://localhost/skiddies/backend/api/like_video.php', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ video_id: videoId })
+  })
+  const result = await res.json()
+  if (result.success) {
+    likedVideos.value.add(videoId)
+  }
 }
 
 async function submitComment(videoId) {
-    const comment = commentInputs.value[videoId]?.trim()
-    if (!comment) return
+  const comment = commentInputs.value[videoId]?.trim()
+  if (!comment) return
 
-    const res = await fetch('http://localhost/skiddies/backend/api/add_comment.php', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-        video_id: videoId,
-        comment: comment
-        })
+  const res = await fetch('http://localhost/skiddies/backend/api/add_comment.php', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      video_id: videoId,
+      comment: comment
     })
+  })
 
-    const result = await res.json()
-    if (result.success) {
-        commentInputs.value[videoId] = ''
-        console.log('Commento inviato con successo')
-    } else {
-        console.error('Errore:', result)
-    }
+  const result = await res.json()
+  if (result.success) {
+    commentInputs.value[videoId] = ''
+    console.log('Commento inviato con successo')
+  } else {
+    console.error('Errore:', result)
+  }
+}
+
+function logout() {
+  fetch('http://localhost/skiddies/backend/api/logout.php', {
+    method: 'POST',
+    credentials: 'include'
+  }).then(() => {
+    router.push('/login')
+  })
 }
 </script>
