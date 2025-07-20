@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 20, 2025 alle 15:30
+-- Creato il: Lug 20, 2025 alle 18:26
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `comments` (
-  `id` varchar(20) NOT NULL,
+  `id` int(11) NOT NULL,
   `content_id` varchar(20) NOT NULL,
   `user_id` varchar(20) NOT NULL,
   `tutor_id` varchar(20) NOT NULL,
@@ -41,8 +41,9 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id`, `content_id`, `user_id`, `tutor_id`, `comment`, `date`) VALUES
-('', '29', '1', '16', 'grazie!', '2025-07-20'),
-('', '30', '1', '16', 'grazie! molto utile', '2025-07-20');
+(1, '1', '1', '16', 'molto utile, grazie!', '2025-07-20'),
+(2, '1', '1', '16', 'bene!', '2025-07-20'),
+(3, '2', '1', '16', 'benissimo', '2025-07-20');
 
 -- --------------------------------------------------------
 
@@ -95,7 +96,10 @@ INSERT INTO `likes` (`user_id`, `tutor_id`, `content_id`) VALUES
 ('16', '16', '29'),
 ('16', '16', '30'),
 ('1', '16', '29'),
-('1', '16', '30');
+('1', '16', '30'),
+('1', '16', '32'),
+('1', '16', '1'),
+('1', '16', '2');
 
 -- --------------------------------------------------------
 
@@ -185,12 +189,20 @@ CREATE TABLE `videos` (
 --
 
 INSERT INTO `videos` (`id`, `tutor_id`, `title`, `category`, `file_path`, `uploaded_at`) VALUES
-(29, 16, 'matematica', 'matematica', 'uploads/videos/vid_687c21abadcfc0.72275820_182879-869766891_small.mp4', '2025-07-19 22:52:27'),
-(30, 16, 'economia', 'economia', 'uploads/videos/vid_687cc6d7c8d331.69430800_182879-869766891_small.mp4', '2025-07-20 10:37:11');
+(1, 16, 'Calcolo differenziale', 'matematica', 'uploads/videos/vid_687d0e0bcbfd21.54296359_182879-869766891_small.mp4', '2025-07-20 15:40:59'),
+(2, 16, 'economia per tutti', 'economia', 'uploads/videos/vid_687d1194cad831.69102032_182879-869766891_small.mp4', '2025-07-20 15:56:04'),
+(3, 16, 'informatica per bambini', 'informatica', 'uploads/videos/vid_687d168af1fbe8.39377266_182879-869766891_small.mp4', '2025-07-20 16:17:14'),
+(4, 16, 'informatica per adulti', 'informatica', 'uploads/videos/vid_687d17f73f0673.75247579_182879-869766891_small.mp4', '2025-07-20 16:23:19');
 
 --
 -- Indici per le tabelle scaricate
 --
+
+--
+-- Indici per le tabelle `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `tutors`
@@ -216,6 +228,12 @@ ALTER TABLE `videos`
 --
 
 --
+-- AUTO_INCREMENT per la tabella `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT per la tabella `tutors`
 --
 ALTER TABLE `tutors`
@@ -231,7 +249,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `videos`
 --
 ALTER TABLE `videos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Limiti per le tabelle scaricate

@@ -1,31 +1,44 @@
 <?php
 session_start();
-
 require_once __DIR__ . '/../components/connect.php';
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'tutor') {
-    http_response_code(401);
+// ✅ Autenticazione tutor
+if (!isset($_SESSION['user']['id']) || $_SESSION['user']['role'] !== 'tutor') {
     echo json_encode(['success' => false, 'error' => 'Non autorizzato']);
     exit;
 }
 
-$tutorId = $_SESSION['user_id'];
+$tutorId = $_SESSION['user']['id'];
 
-// Qui la query deve recuperare titolo, categoria e file_path
-$stmt = $conn->prepare("SELECT id, title, category, file_path FROM videos WHERE tutor_id = ?");
+// ✅ Recupera i video + conteggio like
+$stmt = $conn->prepare("
+    SELECT v.*, 
+           (SELECT COUNT(*) FROM likes l WHERE l.video_id = v.id) AS likes
+    FROM videos v
+    WHERE v.tutor_id = ?
+    ORDER BY v.date DESC
+");
 $stmt->bind_param("i", $tutorId);
 $stmt->execute();
-$res = $stmt->get_result();
 
+$res = $stmt->get_result();
 $videos = [];
+
 while ($row = $res->fetch_assoc()) {
-    $videos[] = $row;
+    $videos[] = [
+        'id' => $row['id'],
+        'title' => $row['title'],
+        'category' => $row['category'],
+        'file_path' => $row['file_path'],
+        'likes' => (int)$row['likes']
+    ];
 }
 
-echo json_encode(['success' => true, 'videos' => $videos]);
+echo json_encode([
+    'success' => true,
+    'videos' => $videos
+]);

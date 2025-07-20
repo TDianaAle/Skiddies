@@ -70,20 +70,39 @@
           <div
             v-for="video in videos"
             :key="video.id"
-            class="bg-white border rounded-lg shadow-sm hover:shadow-md transition cursor-pointer"
+            class="bg-white border rounded-lg shadow-sm hover:shadow-md transition cursor-pointer max-w-xs mx-auto"
             @click="toggleVideo(video.id)"
           >
             <video
               :src="`http://localhost/skiddies/backend/${video.file_path}`"
-              class="w-full h-40 object-cover rounded-t"
+              class="w-full h-28 object-cover rounded-t"
               muted
               preload="metadata"
               playsinline
             ></video>
             <div class="p-4">
-              <h3 class="text-blue-700 font-semibold truncate">{{ video.title }}</h3>
+              <h3 class="text-blue-700 font-semibold truncate flex items-center gap-2">
+                {{ video.title }}
+                <span class="text-red-500" title="Like">❤️ {{ video.likes }}</span>
+              </h3>
               <p class="text-sm text-gray-500">Categoria: {{ video.category }}</p>
+
+              <!-- Commenti -->
+              <div v-if="commentsMap[video.id] && commentsMap[video.id].length > 0" class="mt-3 border-t pt-2">
+                <h4 class="font-semibold text-gray-700 mb-1">Commenti:</h4>
+                <ul>
+                  <li
+                    v-for="comment in commentsMap[video.id]"
+                    :key="comment.id"
+                    class="text-sm text-gray-600 mb-1"
+                  >
+                    {{ comment.comment }} <span class="text-xs text-gray-400">({{ comment.date }})</span>
+                  </li>
+                </ul>
+              </div>
+              <div v-else class="mt-3 text-sm text-gray-400">Nessun commento</div>
             </div>
+
           </div>
         </div>
 
@@ -128,14 +147,41 @@ const sidebarOpen = ref(false)
 const profileImageUrl = ref('http://localhost/skiddies/backend/uploads/profile_images/default.jpg')
 const profileName = ref('Tutor')
 const videos = ref([])
+const commentsMap = ref({}) //per poter visualizzare i commenti
 
 const newVideo = ref({ title: '', category: '' })
 const videoFile = ref(null)
 const expandedVideo = ref(null)
 
+//aggiunto fetchComments
+
+
+//nuova funzione per poter visualizzare i commenti sotto ogni video
+const fetchComments = async (videoId) => {
+  try {
+    const res = await fetch(`http://localhost/skiddies/backend/api/get_comments.php?video_id=${videoId}`, {
+      credentials: 'include'
+    })
+    if (!res.ok) throw new Error('Errore caricamento commenti')
+    const data = await res.json()
+    if (data.success) {
+      commentsMap.value[videoId] = data.comments
+    } else {
+      commentsMap.value[videoId] = []
+    }
+  } catch (error) {
+    console.error('fetchComments error:', error)
+    commentsMap.value[videoId] = []
+  }
+}
 const toggleVideo = (id) => {
   expandedVideo.value = id
+
+  if (id && !commentsMap.value[id]) {
+    fetchComments(id)
+  }
 }
+
 
 const getExpandedVideo = computed(() =>
   videos.value.find((v) => v.id === expandedVideo.value)
@@ -209,9 +255,16 @@ const fetchMyVideos = async () => {
     const res = await fetch('http://localhost/skiddies/backend/api/tutor_videos.php', {
       credentials: 'include'
     })
-    const result = await res.json()
+    const text = await res.text()  // prendi la risposta raw come testo
+    console.log('Risposta raw tutor_videos.php:', text)  // stampa cosa arriva
+
+    // prova a fare il parse JSON solo dopo il log
+    const result = JSON.parse(text)
+
     if (result.success) {
-      videos.value = result.videos
+        videos.value = result.videos
+        result.videos.forEach(video => fetchComments(video.id)) // qui chiama fetchComments per ogni video
+      
     } else {
       console.error('Errore dal backend:', result.error)
     }
