@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 18, 2025 alle 10:19
+-- Creato il: Lug 20, 2025 alle 15:30
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -35,6 +35,14 @@ CREATE TABLE `comments` (
   `comment` varchar(1000) NOT NULL,
   `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `comments`
+--
+
+INSERT INTO `comments` (`id`, `content_id`, `user_id`, `tutor_id`, `comment`, `date`) VALUES
+('', '29', '1', '16', 'grazie!', '2025-07-20'),
+('', '30', '1', '16', 'grazie! molto utile', '2025-07-20');
 
 -- --------------------------------------------------------
 
@@ -79,6 +87,16 @@ CREATE TABLE `likes` (
   `content_id` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `likes`
+--
+
+INSERT INTO `likes` (`user_id`, `tutor_id`, `content_id`) VALUES
+('16', '16', '29'),
+('16', '16', '30'),
+('1', '16', '29'),
+('1', '16', '30');
+
 -- --------------------------------------------------------
 
 --
@@ -122,7 +140,8 @@ INSERT INTO `tutors` (`id`, `name`, `email`, `password`, `image`, `role`) VALUES
 (13, 'test', 'test@gmail.com', '$2y$10$OG80OgiYsarsQbH5CdxClO5ctb4Eq0/CarvTEfhx.PkkmB564YLNq', '', 'tutor'),
 (14, 'prova2', 'prova2@test.com', '$2y$10$wWjfYV8FHng.Vo5T4fgwlOk7Z9pOFeX.YoSxEnVogyw8hprQxtpb2', '', 'tutor'),
 (15, 'Mario Rossi', 'prova4@test.com', '$2y$10$9pGA5kuwedJQEdyb.P8aFe3OSAxSn7EAekf4pNksCeHA/vorFM2qq', '687947da537cb.JPG', 'tutor'),
-(16, 'tutor', 'tutor@gmail.com', '$2y$10$HegaCLB0VEXjmcuhD5nYS.9rOWHxVMI3vOw68E0WvCI5tcTv5tvsK', '', 'tutor');
+(16, 'tutor', 'tutor@gmail.com', '$2y$10$HegaCLB0VEXjmcuhD5nYS.9rOWHxVMI3vOw68E0WvCI5tcTv5tvsK', '', 'tutor'),
+(17, 'prova7', 'prova7@test.com', '$2y$10$/aURU9W4LkW1z81oAumayeX0ZCr.kXztjDfkjMHUWfnTe4hLcYwa6', '', 'tutor');
 
 -- --------------------------------------------------------
 
@@ -131,7 +150,7 @@ INSERT INTO `tutors` (`id`, `name`, `email`, `password`, `image`, `role`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` varchar(20) NOT NULL DEFAULT '',
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -144,14 +163,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `image`, `role`) VALUES
-('', 'studente', 'studente@test.com', '$2y$10$xu2Jt.Cu3nl4uj/fOXRepOc4wu1tfRt/z/qfYmKCSePF92IB8cLjW', '', 'user'),
-('', 'test', 'test@test.com', '$2y$10$Aitu2NGIh3ct676yH3yYy.fez9fGXPpd21Xnd/CFdyxxdSU90s5Ue', '', 'user'),
-('', 'prova', 'prova@test.com', '$2y$10$x0tZYZVPgV/cdfRrKfswweELLigZEzaILez3NTJCNrNG2X0FLcGRS', '', 'user'),
-('', 'prova1', 'prova1@gmail.com', '$2y$10$Lqo81m5jDrZcJx/y2MuFUeXwl0kCLT.6aQPfDW8AUhmrBU5MF.Eee', '', 'user'),
-('', 'ciao', 'ciao@test.com', '$2y$10$nLqaJa5lMWLqB97V0cX1X.We4FRMAIU6udGuKrTiVjpXdyvHoE8hO', '', 'user'),
-('', 'ciao', 'ciao@test.com', '$2y$10$OjvNsvfFAcVhdI4MVBA.vuO2CVAwukb8gzHEhZlp0YdJJLYU3fjCy', '', 'user'),
-('', 'prova3', 'prova3@test.com', '$2y$10$rie.JEwfLjzlnJtbD7K1d.ImZydbM54qnPYCEcMoB2RXYVoUt3C7K', '', 'user'),
-('', 'studente5', 'studente5@test.com', '$2y$10$D6oQW/GXR/H0mmXHNW/KsOEZhUVBxmwAF42aj6YmG..jvrjOK5DTe', '', 'user');
+(1, 'student', 'student@test.com', '$2y$10$hZvJ27V5/AbBXOFjXq4LJOoDM3QPIsBIAkyNUjKAttZbZkHY0lyE2', '', 'user');
 
 -- --------------------------------------------------------
 
@@ -173,9 +185,8 @@ CREATE TABLE `videos` (
 --
 
 INSERT INTO `videos` (`id`, `tutor_id`, `title`, `category`, `file_path`, `uploaded_at`) VALUES
-(9, 15, 'matematica', 'matematica', 'uploads/videos/68792d25b370c_182879-869766891_small.mp4', '2025-07-17 17:04:37'),
-(10, 16, 'mate', 'matematica', 'uploads/videos/vid_6879e9a9e456e5.82080495_182879-869766891_small.mp4', '2025-07-18 06:28:57'),
-(11, 16, 'mate', 'matematica', 'uploads/videos/vid_6879ebe3dce3e1.83159178_182879-869766891_small.mp4', '2025-07-18 06:38:27');
+(29, 16, 'matematica', 'matematica', 'uploads/videos/vid_687c21abadcfc0.72275820_182879-869766891_small.mp4', '2025-07-19 22:52:27'),
+(30, 16, 'economia', 'economia', 'uploads/videos/vid_687cc6d7c8d331.69430800_182879-869766891_small.mp4', '2025-07-20 10:37:11');
 
 --
 -- Indici per le tabelle scaricate
@@ -185,6 +196,12 @@ INSERT INTO `videos` (`id`, `tutor_id`, `title`, `category`, `file_path`, `uploa
 -- Indici per le tabelle `tutors`
 --
 ALTER TABLE `tutors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `users`
+--
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -202,13 +219,19 @@ ALTER TABLE `videos`
 -- AUTO_INCREMENT per la tabella `tutors`
 --
 ALTER TABLE `tutors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT per la tabella `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `videos`
 --
 ALTER TABLE `videos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Limiti per le tabelle scaricate
