@@ -1,91 +1,22 @@
 <template>
     <div class="min-h-screen bg-gray-100">
         <!-- Navbar -->
-        <header class="bg-white shadow">
-        <div class="w-full h-20 px-4 flex items-center justify-between">
-            <div class="flex items-center">
-            <button @click="toggleSidebar" class="focus:outline-none mr-6">
-                <img :src="isSidebarOpen ? '/img/close.png' : '/img/open.png'" alt="Sidebar Toggle" class="h-6 w-6" />
-            </button>
-            <div class="flex items-center">
-                <img src="/img/logo.png" alt="Logo" class="h-16 w-auto" />
-                <h1 class="text-xl font-bold text-gray-800 ml-3">Skiddies - Studente</h1>
-            </div>
-            </div>
-            <div class="flex items-center gap-4">
-            <button @click="logout" class="text-red-600 hover:underline">Esci</button>
-            <div class="relative" @mouseleave="handleDropdownMouseLeave">
-                <img
-                :src="userImageUrl"
-                alt="User Avatar"
-                class="h-10 w-10 rounded-full border-2 border-indigo-400 cursor-pointer object-cover"
-                @click="toggleDropdown"
-                />
-                <div
-                v-if="showDropdown"
-                class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
-                @mousedown.stop
-                >
-                <button
-                    @mousedown.stop.prevent="goToProfile"
-                    class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-50"
-                >
-                    Personalizza profilo
-                </button>
-                </div>
-            </div>
-            </div>
-        </div>
-        </header>
+        <HeaderStudent
+      :userImageUrl="userImageUrl"
+      :showDropdown="showDropdown"
+      @logout="logout"
+      @toggle-dropdown="toggleDropdown"
+      @leave-dropdown="handleDropdownMouseLeave"
+      @go-profile="goToProfile"
+    />
 
-        <div class="flex min-h-screen bg-gray-100">
-        <!-- Sidebar -->
-        <aside
-            class="bg-white shadow-md transition-width duration-300 ease-in-out overflow-hidden"
-            :style="{ width: isSidebarOpen ? '256px' : '80px' }"
-        >
-            <nav class="py-6">
-            <div class="space-y-2">
-                <button @click="goTo('student')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700">
-                <div class="min-w-[80px] flex justify-center items-center">
-                    <img src="/img/home.png" alt="Home" class="h-5 w-5" />
-                </div>
-                <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap font-semibold transition-opacity duration-300">
-                    Dashboard
-                </span>
-                </button>
-
-                <button @click="goTo('playlist')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700">
-                <div class="min-w-[80px] flex justify-center items-center">
-                    <!-- Cambia l'immagine, es. un'icona playlist/video -->
-                    <img src="/img/playlist.png" alt="Playlist" class="h-5 w-5" />
-                </div>
-                <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap transition-opacity duration-300">
-                    Playlist
-                </span>
-                </button>
-
-
-                <button @click="goTo('messages')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700">
-                <div class="min-w-[80px] flex justify-center items-center">
-                    <img src="/img/message.png" alt="Messaggi" class="h-5 w-5" />
-                </div>
-                <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap transition-opacity duration-300">
-                    Messaggi
-                </span>
-                </button>
-
-                <button @click="goTo('playlist')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700">
-                <div class="min-w-[80px] flex justify-center items-center">
-                    <img src="/img/playlist.png" alt="Playlist" class="h-5 w-5" />
-                </div>
-                <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap transition-opacity duration-300">
-                    Playlist
-                </span>
-                </button>
-            </div>
-            </nav>
-        </aside>
+    <div class="flex min-h-screen bg-gray-100">
+      <!-- Sidebar -->
+      <SidebarStudent
+        :isSidebarOpen="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar"
+        @navigate="goTo"
+      />
 
         <!-- Main -->
         <div class="flex-1 flex flex-col">
@@ -183,9 +114,11 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import HeaderStudent from './HeaderStudentView.vue'
+import SidebarStudent from './SidebarStudentView.vue'
 
 const router = useRouter()
-const userImageUrl = ref(localStorage.getItem('userImageUrl') || 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80')
+const userImageUrl = ref('/img/user.png') // Inizia sempre con l'immagine di default
 const showDropdown = ref(false)
 const isSidebarOpen = ref(true)
 
@@ -206,7 +139,7 @@ function toggleDropdown() {
 
 function goToProfile() {
     showDropdown.value = false
-    router.push('/personalization')
+    router.push('/studentPersonalization')
 }
 
 function handleDropdownMouseLeave() {
@@ -226,9 +159,7 @@ const filteredVideos = computed(() => {
 
 onMounted(() => {
     fetchVideos()
-    window.addEventListener('storage', () => {
-        userImageUrl.value = localStorage.getItem('userImageUrl') || userImageUrl.value
-    })
+    fetchUserProfile() // Carica il profilo utente inclusa l'immagine
     fetchPlaylist()
 })
 
@@ -357,7 +288,51 @@ async function submitComment(videoId) {
     }
 }
 
+async function fetchUserProfile() {
+    try {
+        const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            console.error('Errore nel caricamento del profilo utente');
+            return;
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.image && data.image !== '') {
+            // Verifica se l'immagine esiste
+            const imageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+            const img = new Image();
+            img.onload = () => {
+                userImageUrl.value = imageUrl;
+                localStorage.setItem('userImageUrl', imageUrl);
+            };
+            img.onerror = () => {
+                console.warn('Immagine profilo non trovata:', data.image);
+                userImageUrl.value = '/img/user.png';
+                localStorage.setItem('userImageUrl', '/img/user.png');
+            };
+            img.src = imageUrl;
+        } else {
+            // Utente senza immagine personalizzata
+            userImageUrl.value = '/img/user.png';
+            localStorage.setItem('userImageUrl', '/img/user.png');
+        }
+    } catch (error) {
+        console.error('Errore nel caricamento profilo utente:', error);
+        userImageUrl.value = '/img/user.png';
+        localStorage.setItem('userImageUrl', '/img/user.png');
+    }
+}
+
 function logout() {
+    // Pulisci il localStorage
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userImageUrl');
+    
     fetch('http://localhost/skiddies/backend/api/logout.php', {
         method: 'POST',
         credentials: 'include'

@@ -120,7 +120,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const userImageUrl = ref(localStorage.getItem('userImageUrl') || 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80')
+const userImageUrl = ref('/img/user.png') // Inizia sempre con l'immagine di default
 const showDropdown = ref(false)
 const isSidebarOpen = ref(true)
 const playlistVideos = ref([])
@@ -136,7 +136,7 @@ function toggleDropdown() {
 
 function goToProfile() {
   showDropdown.value = false
-  router.push('/personalization')
+  router.push('/studentPersonalization')
 }
 
 function handleDropdownMouseLeave() {
@@ -214,11 +214,46 @@ async function removeFromPlaylist(videoId) {
   }
 }
 
+async function fetchUserProfile() {
+    try {
+        const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            console.error('Errore nel caricamento del profilo utente');
+            return;
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.image && data.image !== '') {
+            const imageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+            const img = new Image();
+            img.onload = () => {
+                userImageUrl.value = imageUrl;
+                localStorage.setItem('userImageUrl', imageUrl);
+            };
+            img.onerror = () => {
+                console.warn('Immagine profilo non trovata:', data.image);
+                userImageUrl.value = '/img/user.png';
+                localStorage.setItem('userImageUrl', '/img/user.png');
+            };
+            img.src = imageUrl;
+        } else {
+            userImageUrl.value = '/img/user.png';
+            localStorage.setItem('userImageUrl', '/img/user.png');
+        }
+    } catch (error) {
+        console.error('Errore nel caricamento profilo utente:', error);
+        userImageUrl.value = '/img/user.png';
+        localStorage.setItem('userImageUrl', '/img/user.png');
+    }
+}
 
 onMounted(() => {
   fetchPlaylist()
-  window.addEventListener('storage', () => {
-    userImageUrl.value = localStorage.getItem('userImageUrl') || userImageUrl.value
-  })
+  fetchUserProfile() // Carica il profilo utente inclusa l'immagine
 })
 </script>

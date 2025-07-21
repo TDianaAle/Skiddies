@@ -16,12 +16,39 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['tutor_id'])) {
 $userId = $_SESSION['user_id'] ?? $_SESSION['tutor_id'];
 $table = isset($_SESSION['tutor_id']) ? 'tutors' : 'users';
 
-if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-    echo json_encode(['success' => false, 'error' => 'Errore file immagine']);
+// Gestisci reset dell'immagine
+if (isset($_POST['reset_image'])) {
+    $stmt = $conn->prepare("UPDATE $table SET image = NULL WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Immagine profilo rimossa']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Errore nell\'aggiornamento del database']);
+    }
+    $stmt->close();
     exit;
 }
 
-$image = $_FILES['image'];
+if (!isset($_FILES['profile_image']) || $_FILES['profile_image']['error'] !== UPLOAD_ERR_OK) {
+    echo json_encode(['success' => false, 'error' => 'Nessun file caricato o errore nell\'upload']);
+    exit;
+}
+
+$image = $_FILES['profile_image'];
+$allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+$maxSize = 5 * 1024 * 1024; // 5MB
+
+if (!in_array($image['type'], $allowedTypes)) {
+    echo json_encode(['success' => false, 'error' => 'Formato file non supportato']);
+    exit;
+}
+
+if ($image['size'] > $maxSize) {
+    echo json_encode(['success' => false, 'error' => 'File troppo grande (max 5MB)']);
+    exit;
+}
+
 $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
 $filename = uniqid() . '.' . $ext;
 
@@ -39,10 +66,16 @@ if (!move_uploaded_file($image['tmp_name'], $destination)) {
 // Salva nel database
 $stmt = $conn->prepare("UPDATE $table SET image = ? WHERE id = ?");
 $stmt->bind_param("si", $filename, $userId);
-$stmt->execute();
-$stmt->close();
 
-echo json_encode([
-    'success' => true,
-    'imageUrl' => 'uploads/profile_images/' . $filename
-]);
+if ($stmt->execute()) {
+    echo json_encode([
+        'success' => true,
+        'filename' => $filename,
+        'imageUrl' => 'uploads/profile_images/' . $filename
+    ]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Errore nel salvataggio del database']);
+}
+
+$stmt->close();
+?>
