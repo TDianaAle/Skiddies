@@ -17,7 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Imposta il Content-Type solo per le risposte non-OPTIONS
 header('Content-Type: application/json');
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Gestisci sia JSON che FormData
+if ($_SERVER['CONTENT_TYPE'] && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
+    $data = json_decode(file_get_contents("php://input"), true);
+} else {
+    // FormData
+    $data = $_POST;
+}
 
 // Verifica che i campi obbligatori siano presenti
 if (!isset($data['name']) || trim($data['name']) === '') {

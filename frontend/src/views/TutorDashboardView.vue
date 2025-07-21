@@ -1,40 +1,22 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-6">
     <!-- Header -->
-    <header class="flex justify-between items-center mb-6 bg-white p-4 shadow">
-      <div class="flex items-center space-x-4">
-        <img
-          :src="profileImageUrl"
-          alt="Profilo"
-          class="w-12 h-12 rounded-full cursor-pointer"
-          @click="sidebarOpen = true"
-        />
-        <h1 class="text-xl font-bold text-gray-800">Benvenuto, {{ profileName }}</h1>
-      </div>
-      <button @click="logout" class="text-red-600 hover:underline">Esci</button>
-    </header>
+     <HeaderTutor
+      :userImageUrl="userImageUrl"
+      :showDropdown="showDropdown"
+      @logout="logout"
+      @toggle-dropdown="toggleDropdown"
+      @leave-dropdown="handleDropdownMouseLeave"
+      @go-profile="goToProfile"
+      @image-error="handleImageError"
+    />
 
-    <!-- Sidebar -->
-    <aside
-      v-if="sidebarOpen"
-      class="fixed top-0 left-0 w-64 h-full bg-white shadow z-50 p-6"
-      @mouseleave="sidebarOpen = false"
-    >
-      <div class="flex flex-col items-center">
-        <img :src="profileImageUrl" alt="Profilo" class="w-24 h-24 rounded-full object-cover mb-4" />
-        <h2 class="text-lg font-semibold mb-2">{{ profileName }}</h2>
-
-        <input type="file" @change="uploadProfileImage" class="mb-4 text-sm" />
-        <input
-          v-model="profileName"
-          @blur="updateProfileName"
-          class="border p-1 w-full text-sm rounded mb-4"
-          placeholder="Modifica nome"
-        />
-
-        <button @click="logout" class="mt-6 text-red-600 hover:underline text-sm">Esci</button>
-      </div>
-    </aside>
+      <div class="flex min-h-screen bg-gray-100">
+    <SidebarTutor
+        :isSidebarOpen="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar"
+        @navigate="goTo"
+      />
 
     <main>
       <!-- Upload Video -->
@@ -134,15 +116,21 @@
         </div>
       </section>
     </main>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import HeaderTutor from './HeaderTutorView.vue'
+import SidebarTutor from './SidebarTutorView.vue'
 
 const router = useRouter()
 const sidebarOpen = ref(false)
+const isSidebarOpen = ref(true)
+const showDropdown = ref(false)
+const userImageUrl = ref('/img/user.png')
 const profileImageUrl = ref('http://localhost/skiddies/backend/uploads/profile_images/default.jpg')
 const profileName = ref('Tutor')
 const videos = ref([])
@@ -195,18 +183,63 @@ const logout = () => {
   })
 }
 
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value
+}
+
+const handleDropdownMouseLeave = () => {
+  showDropdown.value = false
+}
+
+const goToProfile = () => {
+  console.log('goToProfile chiamato - navigazione verso /tutorPersonalization')
+  router.push('/tutorPersonalization')
+}
+
+const handleImageError = () => {
+  console.warn('Errore immagine profilo rilevato, reset a default')
+  userImageUrl.value = '/img/user.png'
+}
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value
+}
+
+const goTo = (route) => {
+  router.push(`/${route}`)
+}
+
 const loadProfile = async () => {
   try {
     const res = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
       credentials: 'include'
     })
     const data = await res.json()
+    console.log('Dati profilo dashboard tutor:', data)
     if (data.success) {
       profileName.value = data.name
-      profileImageUrl.value = `http://localhost/skiddies/backend/${data.image_path}`
+      console.log('Tipo utente:', data.userType)
+      if (data.image && data.image !== '') {
+        userImageUrl.value = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`
+      } else {
+        userImageUrl.value = '/img/user.png'
+      }
+      profileImageUrl.value = userImageUrl.value
+      
+      // Verifica che sia effettivamente un tutor
+      if (data.userType !== 'tutor') {
+        console.warn('Utente non è un tutor, reindirizzamento al login')
+        router.push('/login')
+        return
+      }
+    } else {
+      console.error('Errore caricamento profilo:', data.error)
+      router.push('/login')
     }
   } catch (err) {
     console.error('Errore caricamento profilo:', err)
+    userImageUrl.value = '/img/user.png'
+    router.push('/login')
   }
 }
 

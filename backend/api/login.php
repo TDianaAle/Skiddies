@@ -73,7 +73,16 @@ if ($user && !empty($user['id'])) {
         'email' => $user['email'],
         'table' => $fromTable
     ];
-    $_SESSION['user_id'] = $user['id'];
+    
+    // Imposta la variabile di sessione corretta in base al tipo di utente
+    if ($fromTable === 'tutors') {
+        $_SESSION['tutor_id'] = $user['id'];
+        unset($_SESSION['user_id']); // Rimuovi user_id se è un tutor
+    } else {
+        $_SESSION['user_id'] = $user['id'];
+        unset($_SESSION['tutor_id']); // Rimuovi tutor_id se è uno studente
+    }
+    
     $_SESSION['role'] = $role;
 
     // Debug finale: dati salvati in sessione
