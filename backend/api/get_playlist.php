@@ -37,7 +37,6 @@ $sql = "
         p.id as playlist_id, 
         v.id as video_id,
         v.title,
-        v.description,
         v.file_path,
         p.added_at
     FROM playlist p

@@ -1,5 +1,5 @@
 <?php
-// Abilita la visualizzazione degli errori per il debug
+// Abilita la visualizzazione degli errori per il debug (disabilita in produzione)
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
@@ -39,18 +39,14 @@ try {
         exit;
     }
 
-    // Ottieni l'ID dell'utente
-    $userId = $_SESSION['user_id'] ?? $_SESSION['user']['id'];
-    // Converti in stringa per compatibilità con la tabella
-    $userIdStr = (string)$userId;
+    // Ottieni l'ID dell'utente come intero
+    $userId = intval($_SESSION['user_id'] ?? $_SESSION['user']['id']);
 
-    // Ottieni l'ID del video dal corpo della richiesta
+    // Ottieni l'ID del video dal corpo della richiesta e converti in intero
     $data = json_decode(file_get_contents('php://input'), true);
-    $videoId = $data['video_id'] ?? null;
-    // Converti in stringa per compatibilità con la tabella
-    $videoIdStr = (string)$videoId;
+    $videoId = isset($data['video_id']) ? intval($data['video_id']) : 0;
 
-    if (!$videoId) {
+    if ($videoId === 0) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'ID video mancante']);
         exit;
@@ -58,7 +54,7 @@ try {
 
     // Rimuovi il video dalla playlist
     $stmt = $conn->prepare("DELETE FROM playlist WHERE user_id = ? AND video_id = ?");
-    $stmt->bind_param("ss", $userIdStr, $videoIdStr);
+    $stmt->bind_param("ii", $userId, $videoId);
 
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
@@ -70,6 +66,7 @@ try {
         logError("Errore SQL: " . $stmt->error);
         echo json_encode(['success' => false, 'error' => 'Errore nella rimozione del video dalla playlist']);
     }
+
     $stmt->close();
 } catch (Exception $e) {
     logError("Eccezione: " . $e->getMessage());

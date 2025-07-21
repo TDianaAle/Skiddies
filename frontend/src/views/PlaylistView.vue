@@ -97,7 +97,7 @@
                 <span>❤️</span> {{ video.likes }}
               </span>
               <button 
-                @click="removeFromPlaylist(video.id)" 
+                @click="removeFromPlaylist(video.video_id)" 
                 class="text-sm px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600"
               >
                 Rimuovi
@@ -174,7 +174,8 @@ async function fetchPlaylist() {
     
     const result = await res.json();
     if (result.success) {
-      playlistVideos.value = result.videos || [];
+      playlistVideos.value = result.playlist || [];
+
     } else {
       console.error('Errore nel caricamento della playlist:', result.error);
     }
@@ -186,6 +187,8 @@ async function fetchPlaylist() {
 }
 
 async function removeFromPlaylist(videoId) {
+  console.log('Eliminazione video ID:', videoId); // Debug
+
   try {
     const res = await fetch('http://localhost/skiddies/backend/api/remove_from_playlist.php', {
       method: 'POST',
@@ -193,20 +196,18 @@ async function removeFromPlaylist(videoId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ video_id: videoId })
     });
-    
-    // Verifica se la risposta è valida
-    if (!res.ok) {
-      const text = await res.text();
-      console.error('Errore nella risposta API:', text);
-      throw new Error(`Errore HTTP: ${res.status}`);
-    }
-    
-    const result = await res.json();
-    if (result.success) {
-      // Rimuovi il video dalla lista locale
-      playlistVideos.value = playlistVideos.value.filter(video => video.id !== videoId);
-    } else {
-      console.error('Errore nella rimozione del video:', result.error);
+
+    const text = await res.text();
+    try {
+      const result = JSON.parse(text);
+
+      if (result.success) {
+        playlistVideos.value = playlistVideos.value.filter(video => video.video_id !== videoId);
+      } else {
+        console.error('Errore nella risposta API:', result);
+      }
+    } catch (err) {
+      console.error('Risposta non JSON:', text);
     }
   } catch (error) {
     console.error('Errore nella richiesta:', error);

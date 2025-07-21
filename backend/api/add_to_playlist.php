@@ -1,5 +1,5 @@
 <?php
-// Abilita la visualizzazione degli errori per il debug
+
 
 // non serve usare unique_id quando gli id nel db sono AUTOINCREMENT e lavoriamo con PHPSESSID
 
