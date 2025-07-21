@@ -67,10 +67,13 @@
 </div>
 </div>
 
-        <p class="mt-4 text-sm text-center">
-            Non hai un account? 
-            <router-link to="/register" class="text-blue-500 hover:underline">Registrati</router-link>
-        </p>
+<p class="mt-4 text-sm text-center">
+    Non hai un account? 
+    <router-link to="/register" class="text-blue-500 hover:underline">Registrati</router-link>
+</p>
+<footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
+    2025 Skiddies | Made By Diana Tichy & Sofia Ricci
+</footer>
         
 </template>
 

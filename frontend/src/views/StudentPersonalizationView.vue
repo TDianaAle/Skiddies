@@ -2,108 +2,104 @@
     <div class="min-h-screen bg-gray-100">
         <!-- Navbar -->
         <HeaderStudent
-      :userImageUrl="userImageUrl"
-      :showDropdown="showDropdown"
-      @logout="logout"
-      @toggle-dropdown="toggleDropdown"
-      @leave-dropdown="handleDropdownMouseLeave"
-      @go-profile="goToProfile"
-      @image-error="handleImageError"
+            :userImageUrl="userImageUrl"
+            :showDropdown="showDropdown"
+            @logout="logout"
+            @toggle-dropdown="toggleDropdown"
+            @leave-dropdown="handleDropdownMouseLeave"
+            @go-profile="goToProfile"
+            @image-error="handleImageError"
     />
 
     <div class="flex min-h-screen bg-gray-100">
-      <!-- Sidebar -->
-      <SidebarStudent
-        :isSidebarOpen="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar"
-        @navigate="goTo"
-      />
+        <!-- Sidebar -->
+        <SidebarStudent
+            :isSidebarOpen="isSidebarOpen"
+            @toggle-sidebar="toggleSidebar"
+            @navigate="goTo"
+        />
+        <div class="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
+            <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
+                <div class="p-2 md:p-4">
+                    <div class="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
+                        <h2 class="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>
 
-            <div class="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
-                <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
-                    <div class="p-2 md:p-4">
-                        <div class="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
-                            <h2 class="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>
+                        <div v-if="loading" class="flex justify-center items-center py-10">
+                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+                        </div>
 
-                            <div v-if="loading" class="flex justify-center items-center py-10">
-                                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+                        <div v-else class="grid max-w-2xl mx-auto mt-8">
+                            <div class="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
+
+                                <img class="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
+                                    :src="userImageUrl" 
+                                    alt="Bordered avatar"
+                                    @error="resetToDefaultImage">
+
+                                <div class="flex flex-col space-y-5 sm:ml-8">
+
+                                    <input type="file" accept="image/*" @change="onImageChange"
+                                        class="py-3.5 px-7 text-base font-medium text-indigo-900 bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100" />
+
+
+                                    <button @click="removePicture"
+                                        class="py-3.5 px-7 text-base font-medium text-indigo-900 bg-white border border-indigo-200 hover:bg-indigo-100 rounded-lg">
+                                        Delete picture
+                                    </button>
+                                </div>
                             </div>
 
-                            <div v-else class="grid max-w-2xl mx-auto mt-8">
-                                <div class="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
-
-                                    <img class="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
-                                        :src="userImageUrl" 
-                                        alt="Bordered avatar"
-                                        @error="resetToDefaultImage">
-
-                                    <div class="flex flex-col space-y-5 sm:ml-8">
-
-                                        <input type="file" accept="image/*" @change="onImageChange"
-                                            class="py-3.5 px-7 text-base font-medium text-indigo-900 bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100" />
-
-
-                                        <button @click="removePicture"
-                                            class="py-3.5 px-7 text-base font-medium text-indigo-900 bg-white border border-indigo-200 hover:bg-indigo-100 rounded-lg">
-                                            Delete picture
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="items-center mt-8 sm:mt-14 text-[#202142]">
-                                    <div
-                                        class="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
-                                        <div class="w-full">
-                                            <label for="first_name"
-                                                class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Nome</label>
-                                            <input type="text" id="first_name" v-model="userProfile.name"
-                                                class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                                placeholder="Il tuo nome" required>
-                                        </div>
-
-                                        <div class="w-full">
-                                            <label for="password"
-                                                class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Password</label>
-                                            <input type="password" id="password" v-model="userProfile.password"
-                                                class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                                placeholder="Nuova password (lascia vuoto per non modificare)">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="mb-2 sm:mb-6">
-                                        <label for="email"
-                                            class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Email</label>
-                                        <input type="email" id="email" v-model="userProfile.email"
+                            <div class="items-center mt-8 sm:mt-14 text-[#202142]">
+                                <div
+                                    class="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
+                                    <div class="w-full">
+                                        <label for="first_name"
+                                            class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Nome</label>
+                                        <input type="text" id="first_name" v-model="userProfile.name"
                                             class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                            placeholder="your.email@mail.com" required>
+                                            placeholder="Il tuo nome" required>
                                     </div>
 
-                                    <div class="mb-2 sm:mb-6">
-                                        <label for="profession"
-                                            class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Ruolo</label>
-                                        <input type="text" id="profession" v-model="userProfile.role" disabled
-                                            class="bg-indigo-50 border border-indigo-300 text-gray-500 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
-                                            placeholder="Il tuo ruolo" required>
-                                    </div>
-
-                                    <div class="flex justify-end">
-                                        <button @click="saveProfile" :disabled="loading"
-                                            class="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg 
-                                            text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800 disabled:opacity-50">
-                                            {{ loading ? 'Salvataggio...' : 'Salva' }}
-                                        </button>
+                                    <div class="w-full">
+                                        <label for="password"
+                                            class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Password</label>
+                                        <input type="password" id="password" v-model="userProfile.password"
+                                            class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                            placeholder="Nuova password (lascia vuoto per non modificare)">
                                     </div>
 
                                 </div>
 
-                            </div>
+                                <div class="mb-2 sm:mb-6">
+                                    <label for="email"
+                                        class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Email</label>
+                                    <input type="email" id="email" v-model="userProfile.email"
+                                        class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                        placeholder="your.email@mail.com" required>
+                                </div>
 
+                                <div class="mb-2 sm:mb-6">
+                                    <label for="profession"
+                                        class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Ruolo</label>
+                                    <input type="text" id="profession" v-model="userProfile.role" disabled
+                                        class="bg-indigo-50 border border-indigo-300 text-gray-500 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                        placeholder="Il tuo ruolo" required>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <button @click="saveProfile" :disabled="loading"
+                                        class="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg 
+                                        text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800 disabled:opacity-50">
+                                        {{ loading ? 'Salvataggio...' : 'Salva' }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
+    </div>
         <!-- Footer -->
         <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
             2025 Skiddies | Made By Diana Tichy & Sofia Ricci
@@ -113,8 +109,8 @@
 </template>
 
 <script>
-import HeaderStudent from './HeaderStudentView.vue'
-import SidebarStudent from './SidebarStudentView.vue'
+import HeaderStudent from './HeaderStudentView.vue';
+import SidebarStudent from './SidebarStudentView.vue';
 
 export default {
     components: {
@@ -295,14 +291,17 @@ export default {
                 const data = await response.json();
                 
                 if (data.success) {
-                    alert('Profilo aggiornato con successo!');
-                    this.userProfile.password = ''; // Pulisci il campo password dopo l'aggiornamento
-                    
-                    // Ricarica i dati del profilo per essere sicuri che siano aggiornati
-                    await this.fetchUserProfile();
-                } else {
-                    alert('Errore nell\'aggiornamento del profilo: ' + (data.error || 'Errore sconosciuto'));
-                }
+                alert('Profilo aggiornato con successo!');
+                this.userProfile.password = ''; // Pulisci il campo password dopo l'aggiornamento
+
+                await this.fetchUserProfile();
+
+                // Reindirizza alla dashboard dopo 1 secondi
+                setTimeout(() => {
+                    this.$router.push('/student');
+                }, 1000);
+            }
+
             } catch (error) {
                 console.error('Errore:', error);
                 alert('Errore nell\'aggiornamento del profilo. Riprova più tardi.');

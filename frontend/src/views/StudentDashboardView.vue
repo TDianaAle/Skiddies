@@ -2,21 +2,21 @@
     <div class="min-h-screen bg-gray-100">
         <!-- Navbar -->
         <HeaderStudent
-      :userImageUrl="userImageUrl"
-      :showDropdown="showDropdown"
-      @logout="logout"
-      @toggle-dropdown="toggleDropdown"
-      @leave-dropdown="handleDropdownMouseLeave"
-      @go-profile="goToProfile"
-    />
+            :userImageUrl="userImageUrl"
+            :showDropdown="showDropdown"
+            @logout="logout"
+            @toggle-dropdown="toggleDropdown"
+            @leave-dropdown="handleDropdownMouseLeave"
+            @go-profile="goToProfile"
+            />
 
-    <div class="flex min-h-screen bg-gray-100">
-      <!-- Sidebar -->
-      <SidebarStudent
-        :isSidebarOpen="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar"
-        @navigate="goTo"
-      />
+            <div class="flex min-h-screen bg-gray-100">
+            <!-- Sidebar -->
+            <SidebarStudent
+            :isSidebarOpen="isSidebarOpen"
+            @toggle-sidebar="toggleSidebar"
+            @navigate="goTo"
+        />
 
         <!-- Main -->
         <div class="flex-1 flex flex-col">
@@ -26,17 +26,53 @@
             <!-- Funzionalità -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-                <h3 class="text-lg font-semibold mb-2">I tuoi corsi</h3>
-                <p class="text-gray-600">Visualizza i corsi a cui sei iscritto.</p>
+                    <h3 class="text-lg font-semibold mb-2">La tua playlist</h3>
+                    <p class="text-gray-600 mb-4">Visualizza le playlist a cui sei iscritto.</p>
+                    <!-- Pulsante "Vai a Playlist" -->
+                    <button @click="goTo('playlist')" class="w-full flex items-center py-2 bg-indigo-100 rounded text-indigo-700">
+                        <div class="min-w-[80px] flex justify-center items-center">
+                        <img src="/img/playlist.png" alt="Playlist" class="h-5 w-5" />
+                        </div>
+                        <span class="whitespace-nowrap font-semibold transition-opacity duration-300"
+                            :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'">
+                            Playlist
+                        </span>
+                    </button>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+                <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition relative">
                 <h3 class="text-lg font-semibold mb-2">Messaggi</h3>
-                <p class="text-gray-600">Controlla messaggi e comunicazioni.</p>
+                <p class="text-gray-600 mb-4">Controlla messaggi e comunicazioni.</p>
+
+                <!-- Pulsante Messaggi -->
+                <button @click="showMessageTooltip = !showMessageTooltip"
+                        class="w-full flex items-center py-2 bg-yellow-100 rounded text-yellow-700 relative">
+                    <div class="min-w-[80px] flex justify-center items-center">
+                    <!-- Icona Font Awesome -->
+                    <i class="fa-regular fa-message text-lg"></i>
+                    </div>
+                    <span class="whitespace-nowrap font-semibold">Messaggi</span>
+                </button>
+                <!-- Tooltip -->
+                    <div v-if="showMessageTooltip"
+                        class="absolute z-10 top-0 right-0 mt-[-20px] translate-y-[-100%] bg-white border border-gray-300 rounded-lg shadow px-4 py-2 text-sm text-gray-700 flex items-center space-x-2">
+                        <span>📭 Non ci sono ancora messaggi!</span>
+                    </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-                <h3 class="text-lg font-semibold mb-2">Profilo</h3>
-                <p class="text-gray-600">Aggiorna le tue informazioni personali.</p>
+                    <h3 class="text-lg font-semibold mb-2">Profilo</h3>
+                    <p class="text-gray-600 mb-4">Aggiorna le tue informazioni personali.</p>
+
+                    <!-- Bottone Vai al profilo -->
+                    <button @click="goToProfile"
+                            class="w-full flex items-center py-2 bg-blue-100 rounded text-blue-700">
+                        <div class="min-w-[80px] flex justify-center items-center">
+                        <i class="fa-regular fa-user text-lg"></i>
+                        </div>
+                        <span class="whitespace-nowrap font-semibold">Profilo</span>
+                    </button>
                 </div>
+
             </section>
 
             <!-- Filtro -->
@@ -127,6 +163,17 @@ const selectedCategory = ref('')
 const commentInputs = ref({})
 const likedVideos = ref(new Set())
 const playlistVideos = ref(new Set())
+const showMessageTooltip = ref(false);
+
+function toggleMessageTooltip() {
+    showMessageTooltip.value = true
+
+    // Nasconde il messaggio dopo 2 secondi
+    setTimeout(() => {
+        showMessageTooltip.value = false
+    }, 2000)
+}
+
 
 
 function toggleSidebar() {

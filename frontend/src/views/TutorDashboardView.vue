@@ -115,7 +115,7 @@
           </section>
 
           <!-- Videos Grid Section -->
-          <section aria-labelledby="videos-heading">
+          <section id="video-section" aria-labelledby="videos-heading">
             <div class="flex items-center justify-between mb-6">
               <div class="flex items-center gap-3">
                 <div class="p-3 bg-purple-100 rounded-full">
@@ -284,8 +284,7 @@
           :aria-labelledby="`modal-title-${expandedVideo}`"
           @click.self="toggleVideo(null)"
         >
-          <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto relative animate-pulse"
-            <!-- Modal Header -->
+          <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto relative animate-pulse">
             <div class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 p-6 rounded-t-2xl">
               <div class="flex items-start justify-between">
                 <div class="flex-1">
@@ -396,13 +395,8 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white/80 backdrop-blur-sm border-t border-gray-200 text-center py-6 mt-12">
-      <div class="container mx-auto px-4">
-        <p class="text-gray-600 text-sm">
-          © 2025 <span class="font-semibold text-blue-600">Skiddies</span> | 
-          Made with ❤️ by <span class="font-medium">Diana Tichy</span> & <span class="font-medium">Sofia Ricci</span>
-        </p>
-      </div>
+    <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
+      2025 Skiddies | Made By Diana Tichy & Sofia Ricci
     </footer>
   </div>
 </template>

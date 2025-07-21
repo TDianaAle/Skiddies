@@ -3,22 +3,22 @@
     <div class="min-h-screen bg-gray-100">
         <!-- Navbar -->
         <HeaderTutor
-      :userImageUrl="userImageUrl"
-      :showDropdown="showDropdown"
-      @logout="logout"
-      @toggle-dropdown="toggleDropdown"
-      @leave-dropdown="handleDropdownMouseLeave"
-      @go-profile="goToProfile"
-      @image-error="handleImageError"
+        :userImageUrl="userImageUrl"
+        :showDropdown="showDropdown"
+        @logout="logout"
+        @toggle-dropdown="toggleDropdown"
+        @leave-dropdown="handleDropdownMouseLeave"
+        @go-profile="goToProfile"
+        @image-error="handleImageError"
     />
 
     <div class="flex min-h-screen bg-gray-100">
-      <!-- Sidebar -->
-      <SidebarTutor
-        :isSidebarOpen="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar"
-        @navigate="goTo"
-      />
+        <!-- Sidebar -->
+        <SidebarTutor
+            :isSidebarOpen="isSidebarOpen"
+            @toggle-sidebar="toggleSidebar"
+            @navigate="goTo"
+        />
 
             <div class="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
                 <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
@@ -114,8 +114,8 @@
 </template>
 
 <script>
-import HeaderTutor from './HeaderTutorView.vue'
-import SidebarTutor from './SidebarTutorView.vue'
+import HeaderTutor from './HeaderTutorView.vue';
+import SidebarTutor from './SidebarTutorView.vue';
 
 export default {
     components: {
