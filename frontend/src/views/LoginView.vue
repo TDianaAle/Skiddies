@@ -19,7 +19,7 @@
     </div>
 </header>
 
-<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center ">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <h3 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">Accedi</h3>
     </div>
@@ -58,19 +58,23 @@
             <span>{{ message }}</span>
         </div>
 
-        <div class="flex items-center justify-between">
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-            Accedi
-            </button>
+        <div class="space-y-4">
+  <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
+    Accedi
+  </button>
+
+  <p class="text-sm text-center text-gray-600">
+    Non hai un account?
+    <router-link to="/register" class="text-blue-600 hover:underline font-medium">
+      Registrati
+    </router-link>
+  </p>
         </div>
-    </form>
-</div>
+
+        </form>
+    </div>
 </div>
 
-<p class="mt-4 text-sm text-center">
-    Non hai un account? 
-    <router-link to="/register" class="text-blue-500 hover:underline">Registrati</router-link>
-</p>
 <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
     2025 Skiddies | Made By Diana Tichy & Sofia Ricci
 </footer>
