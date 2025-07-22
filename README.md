@@ -1,44 +1,90 @@
+# 🎓 Skiddies – Piattaforma E-Learning Web
 
-https://www.figma.com/design/dQrHcq4Xzw7mIDJINDUroR/Untitled?node-id=0-1&p=f&t=KNQa50pU57QyIaYW-0
+Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor** di interagire con contenuti video didattici, gestire playlist, e personalizzare la propria esperienza di studio in modo dinamico.
 
-ISTRUZIONI PER AVVIARE IL PROGETTO
+---
+🎨 UI Design (Figma)
+L’interfaccia utente è stata progettata in Figma per definire la user experience prima dello sviluppo frontend.
 
-1. Aprire XAMPP e avviare Apache e MySQL
+https://www.figma.com/design/dQrHcq4Xzw7mIDJINDUroR/Untitled?node-id=0-1&t=elRYdzRqtyrmRvrT-1
 
-2. Aprire phpMyAdmin (http://localhost/phpmyadmin)
+## 🚀 Funzionalità principali
 
-3. Creare un nuovo database, ad esempio:
-   nome: skiddies_db
+### 👨‍🎓 Studente
+- Registrazione e autenticazione
+- Aggiungi e cancella video alla playlist
+- Visione video-lezioni caricate dai vari tutor sulla pagina
+- Lasciare like, commenti
+- Modifica dati e immagine del profilo
 
-4. Importare il file:
-   database/skiddies_db.sql
+### 👩‍🏫 Tutor
+- Registrazione e autenticazione
+- Caricamento video sulla piattaforma 
+- Cancella video dalla piattaforma
+- Visualizzazione dei propri video caricati
+- Visualizzazione dei commenti, likes lasciati dagli studenti
+- Modifica dati e immagine del profilo 
+---
 
-   !!!ogni volta che si modifica il db, il file .sql va esportato ed importato nel progetto manualmente per poter caricare le modifiche su github!!!
+## 🛠️ Tecnologie utilizzate
 
-   IMPLEMENTAZIONI:
+### Backend
+| Tecnologia          | Scopo                                           |
+|---------------------|--------------------------------------------------|
+| PHP                 | API REST, gestione sessioni e autenticazione     |
+| MySQL/MariaDB       | Database relazionale                             |
+| bcrypt (PHP)        | Hashing sicuro delle password                    |
+| Node.js + Express   | Servizio extra per autenticazione (non usato con JWT) |
+| PHP Sessions        | Gestione stato utente tramite PHPSESSID         |
 
-   1. Controlla sessione e autenticazione
+### Frontend
+| Tecnologia          | Scopo                                           |
+|---------------------|--------------------------------------------------|
+| Vue.js 3            | SPA reattiva                                     |
+| Vite                | Tool di build e sviluppo                         |
+| Vue Router          | Routing lato client                              |
+| Axios / Fetch API   | Comunicazione asincrona con backend              |
+| Tailwind CSS        | Styling responsive tramite utility classes       |
+| PostCSS / Autoprefixer | Compatibilità cross-browser                   |
 
-      Quando si effettua login, il server crea una sessione (es. $_SESSION['user'] = [...] in PHP).
+---
 
-      Il browser salva un cookie di sessione (es. PHPSESSID).
+## 🧱 Architettura
 
-      Ad ogni richiesta successiva, il browser invia il cookie al server.
+- Il frontend (Vue 3) comunica con il backend PHP tramite API REST.
+- Le sessioni sono gestite con PHPSESSID (nessun JWT).
+- Nel database MySQL: tabelle users(Studenti), tutor(tutor), video, playlist, likes e comments.
+- L'autenticazione è basata sugli attributi 'role' presenti in entrambe le tabelle   (Studente / Tutor).
+- Tutta la comunicazione frontend-backend avviene via **chiamate AJAX** (Axios o Fetch).
 
-      Il server recupera la sessione associata e sa chi è l’utente.
+---
 
-      Se il cookie o la sessione mancano, il server non riconosce l’utente (e dice "non autorizzato").
+## 🔐 Autenticazione & Sicurezza
 
-   2.Se la sessione non rimane attiva significa che:
-      Il cookie di sessione non viene inviato (ad esempio, mancano credentials: 'include' nelle fetch).
+-  Autenticazione con sessione PHP (`$_SESSION` + `PHPSESSID`)
+-  Password salvate in modo sicuro con `password_hash()` (bcrypt)
+-  Verifica credenziali con `password_verify()`
+-  Sanificazione del nome file al caricamento video:
 
-      Il server non salva correttamente la sessione.
+```php
+$safeName = preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($videoFile['name']));
+$filename = uniqid() . '_' . $safeName;
 
-      La sessione scade subito o viene distrutta.
 
-      C’è un problema di configurazione CORS o cookie (es. cookie non accettati in cross-origin).
+🧪 Istruzioni per avviare il progetto
 
-3. SANIFICAZIONE INPUT DA IMPLEMENTARE
-  - per evitare path trasversal nel caricamento del video
-  $safeName = preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($videoFile['name']));
-  $filename = uniqid() . '_' . $safeName;
+Aprire un terminale nella cartella XAMPP/htdocs e
+scaricare il progetto da github qui
+
+http://localhost/phpmyadmin
+-Creare un nuovo database, skiddies_db, incollando il contenuto
+del file /backend/database/skiddies_db.sql
+
+-avviare mysql e apache su xampp
+- spostarsi nella cartella root del progetto(Skiddies)
+e installare le librerie con npm install
+poi cd frontend e npm run dev
+
+
+
+⚠️ Ogni modifica al database richiede l'esportazione del file .sql aggiornato per essere versionato correttamente su GitHub.
