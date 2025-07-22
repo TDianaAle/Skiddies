@@ -1,3 +1,6 @@
+
+https://www.figma.com/design/dQrHcq4Xzw7mIDJINDUroR/Untitled?node-id=0-1&p=f&t=KNQa50pU57QyIaYW-0
+
 ISTRUZIONI PER AVVIARE IL PROGETTO
 
 1. Aprire XAMPP e avviare Apache e MySQL
