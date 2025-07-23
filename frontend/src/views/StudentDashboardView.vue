@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <!-- Navbar -->
         <HeaderStudent
             :userImageUrl="userImageUrl"
@@ -10,7 +10,7 @@
             @go-profile="goToProfile"
             />
 
-            <div class="flex min-h-screen bg-gray-100">
+    <div class="flex min-h-screen">
             <!-- Sidebar -->
             <SidebarStudent
             :isSidebarOpen="isSidebarOpen"
@@ -19,7 +19,7 @@
         />
 
         <!-- Main -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1">
             <main class="py-8 px-6 max-w-7xl mx-auto">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Benvenuto nella tua area studente!</h2>
 
@@ -44,7 +44,7 @@
                 <p class="text-gray-600 mb-4">Controlla messaggi e comunicazioni.</p>
 
                 <!-- Pulsante Messaggi -->
-                <button @click="showMessageTooltip = !showMessageTooltip"
+                <button @click="toggleMessageTooltip"
                         class="w-full flex items-center py-2 bg-yellow-100 rounded text-yellow-700 relative">
                     <div class="min-w-[80px] flex justify-center items-center">
                     <!-- Icona Font Awesome -->
@@ -79,11 +79,11 @@
             <div class="mt-10 max-w-xs">
                 <label class="block text-gray-700 font-medium mb-1">Filtra per categoria:</label>
                 <select v-model="selectedCategory"
-                class="w-full border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                class="w-full bg-white border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
                 <option value="">Tutte le categorie</option>
-                <option value="informatica">Informatica</option>
-                <option value="matematica">Matematica</option>
-                <option value="economia">Economia</option>
+                <option value="informatica">💻 Informatica</option>
+                <option value="matematica">📐 Matematica</option>
+                <option value="economia">📊 Economia</option>
                 </select>
             </div>
 
@@ -116,7 +116,7 @@
                     </button>
                     </div>
 
-                    <!-- ✅ Commenti corretti -->
+                    <!--  Commenti corretti -->
                     <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Lascia un commento</label>
                     <textarea
@@ -137,14 +137,14 @@
                 <p v-else class="text-gray-600 mt-4">Nessun video trovato per questa categoria.</p>
             </section>
             </main>
-
-            <!-- Footer -->
-            <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
-            2025 Skiddies | Made By Diana Tichy & Sofia Ricci
-            </footer>
         </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 text-center py-4 text-gray-500 text-sm mt-auto">
+        2025 Skiddies | Made By Diana Tichy & Sofia Ricci
+    </footer>
 </template>
 
 <script setup>
@@ -173,8 +173,6 @@ function toggleMessageTooltip() {
         showMessageTooltip.value = false
     }, 2000)
 }
-
-
 
 function toggleSidebar() {
     isSidebarOpen.value = !isSidebarOpen.value
@@ -209,7 +207,6 @@ onMounted(() => {
     fetchUserProfile() // Carica il profilo utente inclusa l'immagine
     fetchPlaylist()
 })
-
 
 async function fetchVideos() {
     try {

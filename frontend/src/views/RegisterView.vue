@@ -158,7 +158,7 @@ async function handleRegister() {
 
     if (response.ok && result.success) {
       message.value = 'Registrazione avvenuta con successo!'
-      router.push('/login') // decommenta per redirigere
+      router.push('/login') 
     } else {
       message.value = result.error || 'Errore imprevisto.'
     }

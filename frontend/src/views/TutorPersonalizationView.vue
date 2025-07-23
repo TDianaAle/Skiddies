@@ -6,13 +6,14 @@
             @toggle-dropdown="toggleDropdown" @leave-dropdown="handleDropdownMouseLeave" @go-profile="goToProfile"
             @image-error="handleImageError" />
 
-        <div class="flex min-h-screen bg-gray-100">
+        <div class="flex min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
             <!-- Sidebar -->
             <SidebarTutor :isSidebarOpen="isSidebarOpen" @toggle-sidebar="toggleSidebar" @navigate="goTo" />
 
-            <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
-                <main class="w-full md:w-2/3 lg:w-3/4 py-8 px-4">
-                    <div class="bg-white shadow-xl rounded-2xl p-8 md:p-10 max-w-4xl mx-auto">
+            <div
+                class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
+                <main class="w-full md:w-2/3 lg:w-3/4 py-8 px-4 max-w-full overflow-hidden">
+                    <div class="bg-white shadow-xl rounded-2xl p-6 md:p-10 max-w-full overflow-hidden">
                         <h2 class="text-3xl font-bold text-indigo-800 border-b pb-4 mb-6">
                             Profilo Tutor
                         </h2>
@@ -25,16 +26,16 @@
                         <!-- Profilo Form -->
                         <div v-else class="grid grid-cols-1 gap-8">
                             <!-- Avatar + upload -->
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-6">
-                                <img class="object-cover w-32 h-32 p-1 rounded-full ring-4 ring-indigo-300"
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-6 min-w-0 flex-wrap">
+                                <img class="object-cover w-32 h-32 p-1 rounded-full ring-4 ring-indigo-300 max-w-full"
                                     :src="userImageUrl" alt="Avatar" @error="resetToDefaultImage" />
 
-                                <div class="flex flex-col gap-3">
+                                <div class="flex flex-col gap-3 w-full sm:w-auto max-w-full">
                                     <input type="file" accept="image/*" @change="onImageChange"
-                                        class="text-sm text-indigo-900 bg-white rounded-lg border border-indigo-300 px-4 py-2 hover:bg-indigo-50 transition" />
+                                        class="w-full max-w-xs text-sm text-indigo-900 bg-white rounded-lg border border-indigo-300 px-4 py-2 hover:bg-indigo-50 transition" />
 
                                     <button @click="removePicture"
-                                        class="text-sm text-indigo-700 bg-white border border-indigo-300 px-4 py-2 rounded-lg hover:bg-indigo-50 transition">
+                                        class="w-full max-w-xs text-sm text-indigo-700 bg-white border border-indigo-300 px-4 py-2 rounded-lg hover:bg-indigo-50 transition">
                                         Elimina immagine
                                     </button>
                                 </div>
@@ -405,8 +406,6 @@ export default {
                 });
         }
 
-
-        // Gli altri metodi rimangono invariati
     },
     mounted() {
         // NON caricare l'immagine dal localStorage all'inizio

@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="bg-white shadow-md transition-width duration-300 ease-in-out overflow-hidden mt-4"
+    class="bg-white shadow-md rounded-xl transition-width duration-300 ease-in-out overflow-hidden mt-4 mb-6"
     :style="{ width: isSidebarOpen ? '256px' : '80px' }"
   >
     <nav class="space-y-2 text-sm">
@@ -10,7 +10,6 @@
           <img :src="isSidebarOpen ? '/img/close.png' : '/img/open.png'" alt="Sidebar Toggle" class="h-5 w-5" />
         </div>
         <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap font-semibold transition-opacity duration-300">
-          <!--qui del testo se si preferisce -->
         </span>
       </button>
 
@@ -72,13 +71,6 @@ function toggleMessageTooltip() {
   setTimeout(() => {
     showMessageTooltip.value = false
   }, 2000)
-}
-
-function scrollToVideos() {
-  const section = document.getElementById('video-section')
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' })
-  }
 }
 
 function handleVideoClick() {

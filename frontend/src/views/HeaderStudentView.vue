@@ -32,10 +32,8 @@
 </template>
 
 
-
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
-
 
 const props = defineProps({
     userImageUrl: String,

@@ -1,11 +1,16 @@
 <template>
   <aside
-    class="bg-white shadow-md transition-width duration-300 ease-in-out overflow-hidden"
+    class="bg-white shadow-md rounded-xl transition-width duration-300 ease-in-out overflow-hidden mt-4 mb-8"
     :style="{ width: isSidebarOpen ? '256px' : '80px' }"
   >
     <nav class="space-y-2 text-sm">
-      <button @click="$emit('toggle-sidebar')" class="focus:outline-none mr-6">
-        <img :src="isSidebarOpen ? '/img/close.png' : '/img/open.png'" alt="Sidebar Toggle" class="h-6 w-6" />
+      <!-- Pulsante Toggle Sidebar -->
+      <button @click="$emit('toggle-sidebar')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700 focus:outline-none">
+        <div class="min-w-[80px] flex justify-center items-center">
+          <img :src="isSidebarOpen ? '/img/close.png' : '/img/open.png'" alt="Sidebar Toggle" class="h-5 w-5" />
+        </div>
+        <span :class="isSidebarOpen ? 'opacity-100' : 'opacity-0'" class="whitespace-nowrap font-semibold transition-opacity duration-300">
+        </span>
       </button>
 
       <button @click="$emit('navigate', 'student')" class="w-full flex items-center py-2 rounded hover:bg-gray-100 text-gray-700">
