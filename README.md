@@ -54,7 +54,7 @@ Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor*
 | PHP                 | API REST, gestione sessioni e autenticazione     |
 | MySQL/MariaDB       | Database relazionale                             |
 | bcrypt (PHP)        | Hashing sicuro delle password                    |
-| Node.js + Express   | Servizio extra per autenticazione (non usato con JWT) |
+| Node.js + Express   | Servizio extra per autenticazione                |
 | PHP Sessions        | Gestione stato utente tramite PHPSESSID         |
 
 ### Frontend
@@ -72,7 +72,7 @@ Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor*
 ## 🧱 Architettura
 
 - Il frontend (Vue 3) comunica con il backend PHP tramite API REST.
-- Le sessioni sono gestite con PHPSESSID (nessun JWT).
+- Le sessioni sono gestite con PHPSESSID.
 - Nel database MySQL: tabelle users(Studenti), tutor(tutor), video, playlist, likes e comments.
 - L'autenticazione è basata sugli attributi 'role' presenti in entrambe le tabelle   (Studente/Tutor).
 - Tutta la comunicazione frontend-backend avviene via **chiamate AJAX** (Axios o Fetch).
