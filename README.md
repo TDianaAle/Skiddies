@@ -84,10 +84,7 @@ Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor*
 -  Autenticazione con sessione PHP (`$_SESSION` + `PHPSESSID`)
 -  Password salvate in modo sicuro con `password_hash()` (bcrypt)
 -  Verifica credenziali con `password_verify()`
--  Sanificazione del nome file al caricamento video:
-
-$safeName = preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($videoFile['name']));
-$filename = uniqid() . '_' . $safeName;
+-  Sanificazione del nome file in upload video.
 
 ---
 
@@ -95,13 +92,17 @@ $filename = uniqid() . '_' . $safeName;
 
 - Aprire un terminale nella cartella XAMPP/htdocs e
 - scaricare il progetto da github
-- git clone https://github.com/TDianaAle/Skiddies.git
-- in http://localhost/phpmyadmin Creare un nuovo database, skiddies_db, incollando il contenut del file /backend/database/skiddies_db.sql
+  
+ '''bash
+  git clone https://github.com/TDianaAle/Skiddies.git
+ '''
+- in http://localhost/phpmyadmin Creare un nuovo database, skiddies_db, incollando il contenuto del file /backend/database/skiddies_db.sql
 - avviare mysql e apache su xampp
 - spostarsi nella cartella root del progetto(Skiddies)e installare le librerie con
-''' npm install
+''' bash
     cd frontend 
-    npm run dev'''
+    npm run dev
+  '''
 
 ⚠️ Ogni modifica al database richiede l'esportazione del file .sql aggiornato per essere versionato correttamente su GitHub.
 
