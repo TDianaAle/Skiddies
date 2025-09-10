@@ -26,16 +26,8 @@ Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor*
 
 ![playlist](frontend/src/assets/readme/playlist.png)
 
-### Demo dell'app
 
-Guarda una demo dell'app in azione:
-
-<video width="500" controls>
-  <source src="frontend/src/assets/readme/demoSkiddies.mp4" type="video/mp4">
-  Il tuo browser non supporta il video tag.
-</video>
-
-## 🚀 Funzionalità principali
+##  Funzionalità principali
 
 ### 👨‍🎓 Studente
 - Registrazione e autenticazione
