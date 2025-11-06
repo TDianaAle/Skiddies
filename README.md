@@ -93,16 +93,16 @@ Skiddies è una piattaforma di e-learning che consente a **Studenti** e **Tutor*
 - Aprire un terminale nella cartella XAMPP/htdocs e
 - scaricare il progetto da github
   
- '''bash
+ ``` bash
   git clone https://github.com/TDianaAle/Skiddies.git
- '''
+ ```
 - in http://localhost/phpmyadmin Creare un nuovo database, skiddies_db, incollando il contenuto del file /backend/database/skiddies_db.sql
 - avviare mysql e apache su xampp
 - spostarsi nella cartella root del progetto(Skiddies)e installare le librerie con
-''' bash
+``` bash
     cd frontend 
     npm run dev
-  '''
+```
 
 ⚠️ Ogni modifica al database richiede l'esportazione del file .sql aggiornato per essere versionato correttamente su GitHub.
 
@@ -113,6 +113,6 @@ php_value upload_max_filesize 10M
 php_value post_max_size 10M
 php_value max_input_time 300
 php_value max_execution_time 300
-
+```
 
 
