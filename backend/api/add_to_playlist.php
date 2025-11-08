@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/cors.php';
 
 // non serve usare unique_id quando gli id nel db sono AUTOINCREMENT e lavoriamo con PHPSESSID
 
@@ -7,7 +8,7 @@ session_start();
 require_once __DIR__ . '/../components/connect.php';
 
 // CORS
-header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Origin: http://console.log(`Server running at http://http://skiddies.atwebpages.com/api/add_to_playlist.php');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: POST, OPTIONS');

@@ -96,7 +96,7 @@
                     <p class="text-sm text-gray-600 mb-2">
                     {{ video.category }} • Tutor: <span class="font-medium">{{ video.tutor_name }}</span>
                     </p>
-                    <video controls :src="`http://localhost/skiddies/backend/${video.file_path}`" class="w-full rounded-lg mb-3 shadow" />
+                    <video controls :src="`http://skiddies.atwebpages.com/${video.file_path}`" class="w-full rounded-lg mb-3 shadow" />
 
                     <div class="flex flex-wrap gap-2 mb-3">
                     <button
@@ -211,7 +211,7 @@ onMounted(() => {
 async function fetchVideos() {
     try {
         // Carica tutti i video
-        const res = await fetch('http://localhost/skiddies/backend/api/get_all_videos.php', {
+        const res = await fetch('http://skiddies.atwebpages.com/api/get_all_videos.php', {
         credentials: 'include'
         });
         
@@ -227,7 +227,7 @@ async function fetchVideos() {
         
         try {
         // Carica i video già nella playlist
-        const playlistRes = await fetch('http://localhost/skiddies/backend/api/get_playlist.php', {
+        const playlistRes = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
             credentials: 'include'
         });
         
@@ -257,7 +257,7 @@ async function fetchVideos() {
 
 async function fetchPlaylist() {
     try {
-        const res = await fetch('http://localhost/skiddies/backend/api/get_playlist.php', {
+        const res = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
         credentials: 'include'
         });
         const result = await res.json();
@@ -274,7 +274,7 @@ async function fetchPlaylist() {
 
 async function addToPlaylist(videoId) {
     try {
-        const res = await fetch('http://localhost/skiddies/backend/api/add_to_playlist.php', {
+        const res = await fetch('http://skiddies.atwebpages.com/api/add_to_playlist.php', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -297,7 +297,7 @@ async function addToPlaylist(videoId) {
 
 
 async function likeVideo(videoId) {
-    const res = await fetch('http://localhost/skiddies/backend/api/like_video.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/like_video.php', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -313,7 +313,7 @@ async function submitComment(videoId) {
     const comment = commentInputs.value[videoId]?.trim()
     if (!comment) return
 
-    const res = await fetch('http://localhost/skiddies/backend/api/add_comment.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/add_comment.php', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -334,7 +334,7 @@ async function submitComment(videoId) {
 
 async function fetchUserProfile() {
     try {
-        const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+        const response = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
             method: 'GET',
             credentials: 'include'
         });
@@ -348,7 +348,7 @@ async function fetchUserProfile() {
         
         if (data.success && data.image && data.image !== '') {
             // Verifica se l'immagine esiste
-            const imageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+            const imageUrl = `http://skiddies.atwebpages.com/${data.image}`;
             const img = new Image();
             img.onload = () => {
                 userImageUrl.value = imageUrl;
@@ -377,7 +377,7 @@ function logout() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userImageUrl');
     
-    fetch('http://localhost/skiddies/backend/api/logout.php', {
+    fetch('http://skiddies.atwebpages.com/api/logout.php', {
         method: 'POST',
         credentials: 'include'
     }).then(() => {

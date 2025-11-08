@@ -32,7 +32,7 @@
             <p class="text-sm text-gray-600 mb-2">
               {{ video.category }} • Tutor: <span class="font-medium">{{ video.tutor_name }}</span>
             </p>
-            <video controls :src="`http://localhost/skiddies/backend/${video.file_path}`"
+            <video controls :src="`http://skiddies.atwebpages.com/${video.file_path}`"
               class="w-full rounded-lg mb-3 shadow" />
 
             <div class="flex justify-between items-center">
@@ -98,7 +98,7 @@ function goTo(route) {
 }
 
 function logout() {
-  fetch('http://localhost/skiddies/backend/api/logout.php', {
+  fetch('http://skiddies.atwebpages.com/api/logout.php', {
     method: 'POST',
     credentials: 'include'
   }).then(() => {
@@ -109,7 +109,7 @@ function logout() {
 async function fetchPlaylist() {
   try {
     loading.value = true;
-    const res = await fetch('http://localhost/skiddies/backend/api/get_playlist.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
       credentials: 'include'
     });
 
@@ -138,7 +138,7 @@ async function removeFromPlaylist(videoId) {
   console.log('Eliminazione video ID:', videoId); // Debug
 
   try {
-    const res = await fetch('http://localhost/skiddies/backend/api/remove_from_playlist.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/remove_from_playlist.php', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -164,7 +164,7 @@ async function removeFromPlaylist(videoId) {
 
 async function fetchUserProfile() {
   try {
-    const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+    const response = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
       method: 'GET',
       credentials: 'include'
     });
@@ -177,7 +177,7 @@ async function fetchUserProfile() {
     const data = await response.json();
 
     if (data.success && data.image && data.image !== '') {
-      const imageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+      const imageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
       const img = new Image();
       img.onload = () => {
         userImageUrl.value = imageUrl;

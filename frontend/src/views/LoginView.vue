@@ -97,7 +97,7 @@ async function handleLogin() {
     }
 
     try {
-        const response = await fetch('http://localhost/skiddies/backend/api/login.php', {
+        const response = await fetch('http://skiddies.atwebpages.com/api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

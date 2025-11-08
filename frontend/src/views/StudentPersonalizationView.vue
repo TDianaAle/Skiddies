@@ -180,7 +180,7 @@ export default {
             };
             reader.readAsDataURL(file);
 
-            fetch('http://localhost/skiddies/backend/api/upload_profile_image.php', {
+            fetch('http://skiddies.atwebpages.com/api/upload_profile_image.php', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData
@@ -188,7 +188,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        this.userImageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.filename}`;
+                        this.userImageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.filename}`;
                         localStorage.setItem('userImageUrl', this.userImageUrl);
                         alert('Immagine profilo aggiornata con successo!');
                     } else {
@@ -214,7 +214,7 @@ export default {
             const formData = new FormData();
             formData.append('reset_image', 'true');
 
-            fetch('http://localhost/skiddies/backend/api/upload_profile_image.php', {
+            fetch('http://skiddies.atwebpages.com/api/upload_profile_image.php', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData
@@ -267,7 +267,7 @@ export default {
                     formData.append('password', this.userProfile.password);
                 }
 
-                const response = await fetch('http://localhost/skiddies/backend/api/update_profile.php', {
+                const response = await fetch('http://skiddies.atwebpages.com/api/update_profile.php', {
                     method: 'POST',
                     credentials: 'include',
                     body: formData
@@ -303,7 +303,7 @@ export default {
                 this.userImageUrl = '/img/user.png';
                 localStorage.removeItem('userImageUrl'); // Pulisci il localStorage per sicurezza
 
-                const response = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+                const response = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -324,7 +324,7 @@ export default {
 
                     // Gestisce l'immagine del profilo specifica per questo utente
                     if (data.image && data.image !== '') {
-                        const imageUrl = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`;
+                        const imageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
 
                         // Verifica se l'immagine esiste effettivamente
                         this.verifyImageExists(imageUrl)
@@ -392,7 +392,7 @@ export default {
             const formData = new FormData();
             formData.append('reset_image', 'true');
 
-            fetch('http://localhost/skiddies/backend/api/upload_profile_image.php', {
+            fetch('http://skiddies.atwebpages.com/api/upload_profile_image.php', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData

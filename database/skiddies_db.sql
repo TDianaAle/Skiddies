@@ -1,7 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
---a
 -- Host: 127.0.0.1
 -- Creato il: Lug 21, 2025 alle 01:11
 -- Versione del server: 10.4.32-MariaDB
@@ -33,7 +32,7 @@ CREATE TABLE `comments` (
   `user_id` varchar(20) NOT NULL,
   `tutor_id` varchar(20) NOT NULL,
   `comment` varchar(1000) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date`DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -76,7 +75,7 @@ CREATE TABLE `content` (
   `description` varchar(1000) NOT NULL,
   `video` varchar(100) NOT NULL,
   `thumb` varchar(100) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp(),
+  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `status` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

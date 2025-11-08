@@ -123,7 +123,7 @@
                 @keydown.space.prevent="toggleVideo(video.id)" :aria-label="`Apri video: ${video.title}`">
                 <!-- Video Thumbnail -->
                 <div class="relative overflow-hidden rounded-t-2xl">
-                  <video :src="`http://localhost/skiddies/backend/${video.file_path}`"
+                  <video :src="`http://skiddies.atwebpages.com/${video.file_path}`"
                     class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" muted
                     preload="metadata" playsinline :aria-label="`Anteprima del video: ${video.title}`"></video>
                   <div
@@ -242,7 +242,7 @@
                   <!-- Video Player -->
                   <div class="relative bg-gray-900 rounded-xl overflow-hidden">
                     <video v-if="getExpandedVideo" :key="getExpandedVideo.id"
-                      :src="`http://localhost/skiddies/backend/${getExpandedVideo.file_path}`" controls playsinline
+                      :src="`http://skiddies.atwebpages.com/${getExpandedVideo.file_path}`" controls playsinline
                       class="w-full h-[60vh] object-contain"
                       :aria-label="`Riproduzione video: ${getExpandedVideo.title}`"></video>
                   </div>
@@ -312,7 +312,7 @@ const sidebarOpen = ref(false)
 const isSidebarOpen = ref(true)
 const showDropdown = ref(false)
 const userImageUrl = ref('/img/user.png')
-const profileImageUrl = ref('http://localhost/skiddies/backend/uploads/profile_images/default.jpg')
+const profileImageUrl = ref('http://skiddies.atwebpages.com/uploads/profile_images/default.jpg')
 const profileName = ref('Tutor')
 const videos = ref([])
 const commentsMap = ref({}) //per poter visualizzare i commenti
@@ -324,7 +324,7 @@ const expandedVideo = ref(null)
 //nuova funzione per poter visualizzare i commenti sotto ogni video
 const fetchComments = async (videoId) => {
   try {
-    const res = await fetch(`http://localhost/skiddies/backend/api/get_comments.php?video_id=${videoId}`, {
+    const res = await fetch(`http://skiddies.atwebpages.com/api/get_comments.php?video_id=${videoId}`, {
       credentials: 'include'
     })
     if (!res.ok) throw new Error('Errore caricamento commenti')
@@ -393,7 +393,7 @@ const scrollToUploadForm = () => {
 }
 
 const logout = () => {
-  fetch('http://localhost/skiddies/backend/api/logout.php', {
+  fetch('http://skiddies.atwebpages.com/api/logout.php', {
     method: 'POST',
     credentials: 'include'
   }).then(() => {
@@ -429,7 +429,7 @@ const goTo = (route) => {
 
 const loadProfile = async () => {
   try {
-    const res = await fetch('http://localhost/skiddies/backend/api/get_profile.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
       credentials: 'include'
     })
     const data = await res.json()
@@ -438,7 +438,7 @@ const loadProfile = async () => {
       profileName.value = data.name
       console.log('Tipo utente:', data.userType)
       if (data.image && data.image !== '') {
-        userImageUrl.value = `http://localhost/skiddies/backend/uploads/profile_images/${data.image}`
+        userImageUrl.value = `http://skiddies.atwebpages.com/uploads/profile_images/${data.image}`
       } else {
         userImageUrl.value = '/img/user.png'
       }
@@ -464,7 +464,7 @@ const loadProfile = async () => {
 
 const fetchMyVideos = async () => {
   try {
-    const res = await fetch('http://localhost/skiddies/backend/api/tutor_videos.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/tutor_videos.php', {
       credentials: 'include'
     })
     const text = await res.text()  // prendi la risposta raw come testo
@@ -505,7 +505,7 @@ const uploadVideo = async () => {
   formData.append('video', videoFile.value)
 
   try {
-    const res = await fetch('http://localhost/skiddies/backend/api/upload_video.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/upload_video.php', {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -530,7 +530,7 @@ const deleteVideo = async (videoId) => {
   }
 
   try {
-    const res = await fetch('http://localhost/skiddies/backend/api/delete_video.php', {
+    const res = await fetch('http://skiddies.atwebpages.com/api/delete_video.php', {
       method: 'POST',
       credentials: 'include',
       headers: {

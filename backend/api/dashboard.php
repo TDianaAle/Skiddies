@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__ . '/cors.php';
+
 session_start();
 include_once('../components/connect.php');
 
-header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Origin: http://console.log(`Server running at http://http://skiddies.atwebpages.com/api/dashboard.php');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
