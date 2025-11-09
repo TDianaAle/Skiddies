@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__ . '/cors.php';
+
 session_start();
 require_once __DIR__ . '/../components/connect.php';
 
-header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Origin: https://funny-chaja-81f5d3.netlify.app');
 header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
