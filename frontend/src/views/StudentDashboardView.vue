@@ -211,7 +211,7 @@ onMounted(() => {
 async function fetchVideos() {
     try {
         // Carica tutti i video
-        const res = await fetch('http://skiddies.atwebpages.com/api/get_all_videos.php', {
+        const res = await fetch('https://skiddies.atwebpages.com/api/get_all_videos.php', {
         credentials: 'include'
         });
         
@@ -227,7 +227,7 @@ async function fetchVideos() {
         
         try {
         // Carica i video già nella playlist
-        const playlistRes = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
+        const playlistRes = await fetch('https://skiddies.atwebpages.com/api/get_playlist.php', {
             credentials: 'include'
         });
         
@@ -257,7 +257,7 @@ async function fetchVideos() {
 
 async function fetchPlaylist() {
     try {
-        const res = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
+        const res = await fetch('https://skiddies.atwebpages.com/api/get_playlist.php', {
         credentials: 'include'
         });
         const result = await res.json();
@@ -274,7 +274,7 @@ async function fetchPlaylist() {
 
 async function addToPlaylist(videoId) {
     try {
-        const res = await fetch('http://skiddies.atwebpages.com/api/add_to_playlist.php', {
+        const res = await fetch('https://skiddies.atwebpages.com/api/add_to_playlist.php', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -297,7 +297,7 @@ async function addToPlaylist(videoId) {
 
 
 async function likeVideo(videoId) {
-    const res = await fetch('http://skiddies.atwebpages.com/api/like_video.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/like_video.php', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -313,7 +313,7 @@ async function submitComment(videoId) {
     const comment = commentInputs.value[videoId]?.trim()
     if (!comment) return
 
-    const res = await fetch('http://skiddies.atwebpages.com/api/add_comment.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/add_comment.php', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -334,7 +334,7 @@ async function submitComment(videoId) {
 
 async function fetchUserProfile() {
     try {
-        const response = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
+        const response = await fetch('https://skiddies.atwebpages.com/api/get_profile.php', {
             method: 'GET',
             credentials: 'include'
         });
@@ -377,7 +377,7 @@ function logout() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userImageUrl');
     
-    fetch('http://skiddies.atwebpages.com/api/logout.php', {
+    fetch('https://skiddies.atwebpages.com/api/logout.php', {
         method: 'POST',
         credentials: 'include'
     }).then(() => {

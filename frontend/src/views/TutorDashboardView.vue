@@ -393,7 +393,7 @@ const scrollToUploadForm = () => {
 }
 
 const logout = () => {
-  fetch('http://skiddies.atwebpages.com/api/logout.php', {
+  fetch('https://skiddies.atwebpages.com/api/logout.php', {
     method: 'POST',
     credentials: 'include'
   }).then(() => {
@@ -429,7 +429,7 @@ const goTo = (route) => {
 
 const loadProfile = async () => {
   try {
-    const res = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/get_profile.php', {
       credentials: 'include'
     })
     const data = await res.json()
@@ -464,7 +464,7 @@ const loadProfile = async () => {
 
 const fetchMyVideos = async () => {
   try {
-    const res = await fetch('http://skiddies.atwebpages.com/api/tutor_videos.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/tutor_videos.php', {
       credentials: 'include'
     })
     const text = await res.text()  // prendi la risposta raw come testo
@@ -505,7 +505,7 @@ const uploadVideo = async () => {
   formData.append('video', videoFile.value)
 
   try {
-    const res = await fetch('http://skiddies.atwebpages.com/api/upload_video.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/upload_video.php', {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -530,7 +530,7 @@ const deleteVideo = async (videoId) => {
   }
 
   try {
-    const res = await fetch('http://skiddies.atwebpages.com/api/delete_video.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/delete_video.php', {
       method: 'POST',
       credentials: 'include',
       headers: {

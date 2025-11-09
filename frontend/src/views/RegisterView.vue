@@ -130,7 +130,7 @@ async function handleRegister() {
   }
 
   try {
-    const response = await fetch('http://skiddies.atwebpages.com/api/register.php', {
+    const response = await fetch('https://skiddies.atwebpages.com/api/register.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

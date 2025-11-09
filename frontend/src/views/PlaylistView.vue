@@ -109,7 +109,7 @@ function logout() {
 async function fetchPlaylist() {
   try {
     loading.value = true;
-    const res = await fetch('http://skiddies.atwebpages.com/api/get_playlist.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/get_playlist.php', {
       credentials: 'include'
     });
 
@@ -138,7 +138,7 @@ async function removeFromPlaylist(videoId) {
   console.log('Eliminazione video ID:', videoId); // Debug
 
   try {
-    const res = await fetch('http://skiddies.atwebpages.com/api/remove_from_playlist.php', {
+    const res = await fetch('https://skiddies.atwebpages.com/api/remove_from_playlist.php', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -164,7 +164,7 @@ async function removeFromPlaylist(videoId) {
 
 async function fetchUserProfile() {
   try {
-    const response = await fetch('http://skiddies.atwebpages.com/api/get_profile.php', {
+    const response = await fetch('https://skiddies.atwebpages.com/api/get_profile.php', {
       method: 'GET',
       credentials: 'include'
     });
