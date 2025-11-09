@@ -32,7 +32,7 @@
             <p class="text-sm text-gray-600 mb-2">
               {{ video.category }} • Tutor: <span class="font-medium">{{ video.tutor_name }}</span>
             </p>
-            <video controls :src="`http://skiddies.atwebpages.com/${video.file_path}`"
+            <video controls :src="`https://skiddies.atwebpages.com/${video.file_path}`"
               class="w-full rounded-lg mb-3 shadow" />
 
             <div class="flex justify-between items-center">
@@ -98,7 +98,7 @@ function goTo(route) {
 }
 
 function logout() {
-  fetch('http://skiddies.atwebpages.com/api/logout.php', {
+  fetch('https://skiddies.atwebpages.com/api/logout.php', {
     method: 'POST',
     credentials: 'include'
   }).then(() => {
@@ -177,7 +177,7 @@ async function fetchUserProfile() {
     const data = await response.json();
 
     if (data.success && data.image && data.image !== '') {
-      const imageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
+      const imageUrl = `https://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
       const img = new Image();
       img.onload = () => {
         userImageUrl.value = imageUrl;

@@ -96,7 +96,7 @@
                     <p class="text-sm text-gray-600 mb-2">
                     {{ video.category }} • Tutor: <span class="font-medium">{{ video.tutor_name }}</span>
                     </p>
-                    <video controls :src="`http://skiddies.atwebpages.com/${video.file_path}`" class="w-full rounded-lg mb-3 shadow" />
+                    <video controls :src="`https://skiddies.atwebpages.com/${video.file_path}`" class="w-full rounded-lg mb-3 shadow" />
 
                     <div class="flex flex-wrap gap-2 mb-3">
                     <button
@@ -348,7 +348,7 @@ async function fetchUserProfile() {
         
         if (data.success && data.image && data.image !== '') {
             // Verifica se l'immagine esiste
-            const imageUrl = `http://skiddies.atwebpages.com/${data.image}`;
+            const imageUrl = `https://skiddies.atwebpages.com/${data.image}`;
             const img = new Image();
             img.onload = () => {
                 userImageUrl.value = imageUrl;

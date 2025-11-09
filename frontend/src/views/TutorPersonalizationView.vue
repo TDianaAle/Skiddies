@@ -189,7 +189,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        this.userImageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.filename}`;
+                        this.userImageUrl = `https://skiddies.atwebpages.com/uploads/profile_images/${data.filename}`;
                         localStorage.setItem('userImageUrl', this.userImageUrl);
                         alert('Immagine profilo aggiornata con successo!');
                     } else {
@@ -322,7 +322,7 @@ export default {
 
                     // Gestisce l'immagine del profilo specifica per questo utente
                     if (data.image && data.image !== '') {
-                        const imageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
+                        const imageUrl = `https://skiddies.atwebpages.com/uploads/profile_images/${data.image}`;
 
                         // Verifica se l'immagine esiste effettivamente
                         this.verifyImageExists(imageUrl)
