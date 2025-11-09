@@ -4,7 +4,7 @@ require_once __DIR__ . '/cors.php';
 require_once __DIR__ . '/../components/connect.php';
 
 // CORS Headers
-header('Access-Control-Allow-Origin: https://funny-chaja-81f5d3.netlify.app');
+header('Access-Control-Allow-Origin: https://skiddies.atwebpages.com');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
