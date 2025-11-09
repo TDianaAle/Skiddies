@@ -188,7 +188,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        this.userImageUrl = `http://skiddies.atwebpages.com/uploads/profile_images/${data.filename}`;
+                        this.userImageUrl = `https://skiddies.atwebpages.com/uploads/profile_images/${data.filename}`;
                         localStorage.setItem('userImageUrl', this.userImageUrl);
                         alert('Immagine profilo aggiornata con successo!');
                     } else {
