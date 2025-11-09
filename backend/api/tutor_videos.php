@@ -4,11 +4,11 @@ require_once __DIR__ . '/cors.php';
 session_start();
 require_once __DIR__ . '/../components/connect.php';
 
-header('Access-Control-Allow-Origin: https://skiddies.atwebpages.com');
+
 header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
-// ✅ Autenticazione tutor
+//  Autenticazione tutor
 if (!isset($_SESSION['user']['id']) || $_SESSION['user']['role'] !== 'tutor') {
     echo json_encode(['success' => false, 'error' => 'Non autorizzato']);
     exit;
@@ -16,7 +16,7 @@ if (!isset($_SESSION['user']['id']) || $_SESSION['user']['role'] !== 'tutor') {
 
 $tutorId = $_SESSION['user']['id'];
 
-// ✅ Recupera i video + conteggio like
+//  Recupera i video + conteggio like
 $stmt = $conn->prepare("
     SELECT v.*, 
         (SELECT COUNT(*) FROM likes l WHERE l.content_id = v.id) AS likes

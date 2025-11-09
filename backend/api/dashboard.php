@@ -3,7 +3,6 @@
 session_start();
 include_once('../components/connect.php');
 
-header('Access-Control-Allow-Origin: https://skiddies.atwebpages.com');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
